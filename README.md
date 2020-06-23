@@ -3,85 +3,60 @@ Wraps Test::Pod::Coverage to support undocumented subs and statistics on changed
 
 # NAME
 
-WebService::SmartyStreets
+Test::PodCoverage
+Test::PodSyntax
 
 # VERSION
 
-version 0.0105
+version 0.0001
 
 # SYNOPSIS
 
-    use WebService::SmartyStreets;
+    use Test::PodCoverage qw(check);
 
-    my $ss = WebService::SmartyStreets->new(
-        auth_id     => 'abc123',
-        auth_token  => 'zyx456',
-    );
+    Test::PodCoverage::check('lib', {
+        MyModule::File1 => 3,
+        MyModule::File2 => 1,
+        MyModule::File3 => 4,
+    });
+    
 
-    $ss->verify_address(...);
+    use Test::PodSyntax qw(check);
+
+    Test::PodCoverage::check('lib');
 
 # DESCRIPTION
 
-This module provides bindings for the
-[SmartyStreets](http://smartystreets.com/products/liveaddress-api) API.
-
-[![Build Status](https://travis-ci.org/aanari/WebService-SmartyStreets.svg?branch=master)](https://travis-ci.org/aanari/WebService-SmartyStreets)
+This Perl module check a given set of folders against the POD coverage and the POD syntax.
 
 # METHODS
 
-## new
+## check
 
-Instantiates a new WebService::SmartyStreets client object.
-
-    my $ss = WebService::SmartyStreets->new(
-        auth_id    => $auth_id,
-        auth_token => $auth_token,
-        timeout    => $retries,    # optional
-        retries    => $retries,    # optional
-    );
+The only method that both modules have is the `check` method.
 
 **Parameters**
 
-- - `auth_id`
+=head2 Test::PodCoverage::check($directories, $naked_packages);
 
-    _Required_
-     
+=over 4
 
-    A valid SmartyStreets auth id for your account.
+=item * C<directories> Is a mandatory parameter that can be a `string` or an `arrayref` of directories to check pod against.
 
-- - `auth_token`
+=item * C<naked_packages> Is an optional parameter that contains some packages which are allowed to have naked subs.
 
-    _Required_
-     
+=back
 
-    A valid SmartyStreets auth token for your account.
+=head2 Test::PodSyntax::check($directories);
 
-- - `timeout`
+=over 4
 
-    _Optional_
-     
+=item * C<directories>
 
-    The number of seconds to wait per request until timing out.  Defaults to `10`.
+It's a set of directories that we want to check POD syntax in,
+It can be a `comma separated string` or an `arrayref of strings`.
 
-- - `retries`
-
-    _Optional_
-     
-
-    The number of times to retry requests in cases when SmartyStreets returns a 5xx response.  Defaults to `0`.
-
-## verify\_address
-
-Validates an address given.
-
-**Request:**
-
-    verify_address(
-        street  => '370 Townsend St',
-        city    => 'San Francisco',
-        state   => 'CA',
-        zipcode => '94107',
-    );
+=back
 
 **Response:**
 
@@ -92,36 +67,17 @@ Validates an address given.
         zipcode  => '94107-1607',
     }]
 
-**Exceptions:**
-
-- - `WebService::SmartyStreets::Exception::AddressNotFound`
-
-    Address Not Found.
-
-- - `WebService::SmartyStreets::Exception::AddressMissingInformation`
-
-    The address you entered was found but more information is needed to match to a specific address.
-
-# BUGS
-
-Please report any bugs or feature requests on the bugtracker website
-https://github.com/aanari/WebService-SmartyStreets/issues
-
-When submitting a bug or request, please include a test-file or a
-patch to an existing test-file that illustrates the bug or desired
-feature.
-
 # AUTHOR
 
-Ali Anari <ali@anari.me>
+Ramin Sadeghnasab <ramin@firstsource.tech>
 
 # CONTRIBUTOR
 
-Naveed Massjouni <naveedm9@gmail.com>
+Ramin Sadeghnasab <ramin@firstsource.tech>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Ali Anari.
+This software is copyright (c) 2020 by Ramin Sadeghnasab.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
