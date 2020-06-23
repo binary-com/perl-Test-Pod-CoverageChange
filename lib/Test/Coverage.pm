@@ -1,4 +1,4 @@
-package PodCheck::Coverage;
+package Test::PodCoverage;
 
 use strict;
 use warnings;

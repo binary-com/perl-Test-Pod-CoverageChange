@@ -1,4 +1,4 @@
-package PodCheck::All;
+package Test::PodAll;
 
 use strict;
 use warnings;
@@ -21,8 +21,8 @@ prints B<not ok- The number of errors in the POD structure> if the file has any 
 
 =cut
 
-use PodCheck::Coverage;
-use PodCheck::Syntax;
+use Test::PodCoverage qw(check);
+use Test::PodSyntax qw(check);
 
 use base 'Exporter';
 our @EXPORT_OK = qw( check );
@@ -48,7 +48,7 @@ sub check {
     my $directories = shift;
     my $naked_packages = shift;
 
-    PodCheck::Coverage::check($directories, $naked_packages);
-    PodCheck::Syntax::check($directories);
+    Test::PodCoverage::check($directories, $naked_packages);
+    Test::PodSyntax::check($directories);
 }
 

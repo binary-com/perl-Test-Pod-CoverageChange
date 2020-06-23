@@ -1,4 +1,4 @@
-package PodCheck::Syntax;
+package Test::PodSyntax;
 
 use strict;
 use warnings;
