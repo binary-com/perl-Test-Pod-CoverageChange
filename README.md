@@ -58,15 +58,6 @@ It can be a `comma separated string` or an `arrayref of strings`.
 
 =back
 
-**Response:**
-
-    [{
-        street   => '370 Townsend St',
-        city     => 'San Francisco',
-        state    => 'CA',
-        zipcode  => '94107-1607',
-    }]
-
 # AUTHOR
 
 Ramin Sadeghnasab <ramin@firstsource.tech>
