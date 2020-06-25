@@ -1,4 +1,7 @@
-use Test::Modern qw(use_ok -more);
+use strict;
+use warnings;
+
+use Test::More;
 
 use_ok 'Test::PodCoverage';
 use_ok 'Test::PodSyntax';
