@@ -1,4 +1,5 @@
 package Test::PodSyntax;
+# ABSTRACT: check perl modules against their pod syntax
 
 use strict;
 use warnings;
