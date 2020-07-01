@@ -1,4 +1,5 @@
 package SimplePackageWithPodSyntaxError;
+
 use strict;
 use warnings;
 

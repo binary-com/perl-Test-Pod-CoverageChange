@@ -1,7 +1,10 @@
 package Test::PodCoverage;
+# ABSTRACT: check perl modules against their pod coverage
 
 use strict;
 use warnings;
+
+our $VERSION='0.01';
 
 =pod
 
@@ -49,6 +52,12 @@ sub check_existing_naked_packages {
         my $coverage_percentage = defined $pc->coverage ? $pc->coverage * 100 : 0;
         my $max_expected_naked_subs = $naked_packages->{$package};
         my $naked_subs_count = scalar $pc->naked // scalar $pc->_get_syms($package);
+
+        use Data::Dumper;
+        warn 'STR'x20 . __FILE__ . ':' . __LINE__ ;
+        warn Dumper $pc->_get_syms($package);
+        # warn Dumper ($package);
+        warn 'END'x20 . __FILE__ . ':' . __LINE__ ;
 
         TODO: {
             local $TODO;
