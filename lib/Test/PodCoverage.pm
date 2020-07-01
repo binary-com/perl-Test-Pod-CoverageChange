@@ -53,12 +53,6 @@ sub check_existing_naked_packages {
         my $max_expected_naked_subs = $naked_packages->{$package};
         my $naked_subs_count = scalar $pc->naked // scalar $pc->_get_syms($package);
 
-        use Data::Dumper;
-        warn 'STR'x20 . __FILE__ . ':' . __LINE__ ;
-        warn Dumper $pc->_get_syms($package);
-        # warn Dumper ($package);
-        warn 'END'x20 . __FILE__ . ':' . __LINE__ ;
-
         TODO: {
             local $TODO;
 
