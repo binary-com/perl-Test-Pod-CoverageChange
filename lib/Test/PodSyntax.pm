@@ -24,6 +24,7 @@ prints B<not ok- The number of errors in the POD structure> if the file has any 
 
 use Test::More;
 use Pod::Checker;
+use File::Find::Rule;
 
 use base 'Exporter';
 our @EXPORT_OK = qw( check );
@@ -42,7 +43,7 @@ This function checks the POD syntax for a given set of directories.
 =item * C<directories>
 
 It's a set of directories that we want to check POD syntax in.
-It can be a comma separated string or an arrayref of strings.
+It can be a string or an arrayref of strings which shows directory.
 
 =back
 
@@ -50,9 +51,11 @@ It can be a comma separated string or an arrayref of strings.
 
 sub check {
     my $directories = shift;
-    $directories = join(', ', @$directories) if ref $directories eq 'ARRAY';
+    $directories = [$directories] if ref $directories ne 'ARRAY';
 
-    my @files_path = `find $directories -name '*.p[lm]'`;
+    my @files_path = File::Find::Rule->file()
+                                     ->name( '*.p[m|l]' )
+                                     ->in(@$directories);
 
     for my $file_path (@files_path) {
         chomp $file_path;
