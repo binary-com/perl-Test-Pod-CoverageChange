@@ -1,10 +1,5 @@
-package Test::PodCoverage;
+package Test::Pod::CoverageChange;
 # ABSTRACT: check perl modules against their pod coverage
-
-use strict;
-use warnings;
-
-our $VERSION='0.01';
 
 =pod
 
@@ -15,6 +10,7 @@ Pod coverage calculator test file.
 =head1 SYNOPSIS
 
 It checks all files that placed under the `lib` folder against their POD coverage to see if all existing functions have POD or not?
+It checks all files that placed under the `lib` folder against their POD syntax to see if they have a valid POD syntax or not.
 
 =head1 DESCRIPTION
 
@@ -23,14 +19,45 @@ Prints B<not ok> (with respective message) if our latest changes increased/decre
 Prints B<not ok> if currently existing packages have 100% coverage unless you remove the package from B<%naked_packages> variable.
 Prints a proper message for the newly added packages.
 
+prints B<ok> for the files that have no POD syntax error.
+prints B<not ok- There is no POD in the file> if the file has no POD at all. I put this into a TODO test so CircleCI's tests will pass.
+prints B<not ok- The number of errors in the POD structure> if the file has any error. It causes CircleCI's tests to fail.
+
 =cut
+use strict;
+use warnings;
 
 use Test::More;
+use Pod::Checker;
 use Pod::Coverage;
+use File::Find::Rule;
 use Test::Pod::Coverage;
+use Exporter qw(import export_to_level);
 
-use base 'Exporter';
+our $VERSION='0.01';
+
+use constant {
+  POD_SYNTAX_IS_OK => 0,
+  FILE_HAS_NO_POD => -1,
+};
+
 our @EXPORT_OK = qw( check );
+
+=pod
+
+=head2 check
+
+Check all modules under the given directory against POD coverage and POD syntax
+
+=over 4
+
+=item * C<directory> An arrayref of directories to check pod against
+
+=item * C<naked_packages> A hashref that contains some packages which are allowed to have naked subs.
+
+=back
+
+=cut
 
 sub check {
     my $path = shift;
@@ -38,7 +65,46 @@ sub check {
 
     $path = [$path] unless ref $path eq 'ARRAY';
 
-    check_pods($path, $naked_packages);
+    check_pod_coverage($path, $naked_packages);
+    check_pod_syntax($path);
+}
+
+sub check_pod_coverage {
+    my $directories = shift;
+    my $naked_packages = shift;
+
+    check_existing_naked_packages($naked_packages) if defined $naked_packages;
+
+    # Check for newly added packages PODs
+    foreach my $package (all_modules(@$directories)) {
+        next if $naked_packages && (grep(/^$package$/, keys %$naked_packages));
+        pod_coverage_ok($package, {private => []});
+    }
+}
+
+sub check_pod_syntax {
+    my $directories = shift;
+    $directories = [$directories] if ref $directories ne 'ARRAY';
+
+    my @files_path = File::Find::Rule->file()
+                                     ->name( '*.p[m|l]' )
+                                     ->in(@$directories);
+
+    for my $file_path (@files_path) {
+        chomp $file_path;
+        my $check_result = podchecker($file_path);
+
+        if ($check_result == POD_SYNTAX_IS_OK){
+            pass sprintf("Pod structure is OK in the file %s.", $file_path);
+        } elsif ($check_result == FILE_HAS_NO_POD) {
+            TODO: {
+                local $TODO = sprintf("There is no POD in the file %s.", $file_path);
+                fail;
+            }
+        } else {
+            fail sprintf("There are %d errors in the POD structure in the %s.", $check_result, $file_path);
+        }
+    }
 }
 
 sub check_existing_naked_packages {
@@ -77,36 +143,9 @@ MESSAGE
 
         if ($fully_covered) {
             fail sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file %%naked_packages variable to fix this error.',
-                $package, __FILE__);
+              $package, __FILE__);
         }
     }
 }
 
-=pod
-
-=head2 check_pods
-
-Check all modules under the given directory against POD coverage and POD syntax
-
-=over 4
-
-=item * C<directory> An arrayref of directories to check pod against
-
-=item * C<naked_packages> A hashref that contains some packages which are allowed to have naked subs.
-
-=back
-
-=cut
-
-sub check_pods {
-    my $directories = shift;
-    my $naked_packages = shift;
-
-    check_existing_naked_packages($naked_packages) if defined $naked_packages;
-
-    # Check for newly added packages PODs
-    foreach my $package (all_modules(@$directories)) {
-        next if $naked_packages && (grep(/^$package$/, keys %$naked_packages));
-        pod_coverage_ok($package, {private => []});
-    }
-}
+1;
