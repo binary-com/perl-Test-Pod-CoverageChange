@@ -32,7 +32,6 @@ use Pod::Checker;
 use Pod::Coverage;
 use File::Find::Rule;
 use Test::Pod::Coverage;
-use Exporter qw(import export_to_level);
 
 our $VERSION='0.01';
 
@@ -41,7 +40,8 @@ use constant {
   FILE_HAS_NO_POD => -1,
 };
 
-our @EXPORT_OK = qw( check );
+our @ISA = qw(Exporter);
+our @EXPORT_OK = qw(check);
 
 =pod
 
@@ -69,6 +69,8 @@ sub check {
 
     check_pod_coverage($path, $naked_packages);
     check_pod_syntax($path);
+
+    Test::Pod::CoverageChange->export_to_level(1, @_);
 }
 
 =head2 check_pod_coverage
@@ -84,7 +86,7 @@ sub check_pod_coverage {
     check_existing_naked_packages($naked_packages) if defined $naked_packages;
 
     # Check for newly added packages PODs
-    foreach my $package (all_modules(@$directories)) {
+    foreach my $package (Test::Pod::Coverage::all_modules(@$directories)) {
         next if $naked_packages && (grep(/^$package$/, keys %$naked_packages));
         pod_coverage_ok($package, {private => []});
     }
@@ -143,7 +145,7 @@ sub check_existing_naked_packages {
             local $TODO;
 
             if (!$fully_covered) {
-                $TODO = sprintf('We have %.2f%% POD coverage for the module %s.', $coverage_percentage, $package);
+                $TODO = sprintf("We have %.2f%% POD coverage for the module '%s'.", $coverage_percentage, $package);
                 fail;
             }
         }
