@@ -47,6 +47,8 @@ our @EXPORT_OK = qw( check );
 
 =head2 check
 
+Todo: Update this pod
+
 Check all modules under the given directory against POD coverage and POD syntax
 
 =over 4
@@ -69,6 +71,12 @@ sub check {
     check_pod_syntax($path);
 }
 
+=head2 check_pod_coverage
+
+Todo:: complete this pod
+
+=cut
+
 sub check_pod_coverage {
     my $directories = shift;
     my $naked_packages = shift;
@@ -81,6 +89,12 @@ sub check_pod_coverage {
         pod_coverage_ok($package, {private => []});
     }
 }
+
+=head2 check_pod_syntax
+
+Todo:: complete this pod
+
+=cut
 
 sub check_pod_syntax {
     my $directories = shift;
@@ -106,6 +120,12 @@ sub check_pod_syntax {
         }
     }
 }
+
+=head2 check_existing_naked_packages
+
+Todo:: complete this pod
+
+=cut
 
 sub check_existing_naked_packages {
     my $naked_packages = shift;
