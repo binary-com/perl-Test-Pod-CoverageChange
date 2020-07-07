@@ -1,8 +1,10 @@
-use strict;
-use warnings;
+#!perl -T
 
-use Test::More;
+use Test::More tests => 1;
 
-use_ok 'Test::Pod::CoverageChange';
+BEGIN {
+    use_ok( 'Test::Pod::CoverageChange' ) || print "Bail out!
+";
+}
 
-done_testing;
+diag( "Testing Test::Pod::CoverageChange $Test::Pod::CoverageChange::VERSION, Perl $], $^X" );
