@@ -68,7 +68,7 @@ sub check {
     $path = [$path] unless ref $path eq 'ARRAY';
 
     check_pod_coverage($path, $naked_packages);
-    check_pod_syntax($path);
+    # check_pod_syntax($path);
 
     Test::Pod::CoverageChange->export_to_level(1, @_);
 }
@@ -88,6 +88,11 @@ sub check_pod_coverage {
     # Check for newly added packages PODs
     foreach my $package (Test::Pod::Coverage::all_modules(@$directories)) {
         next if $naked_packages && (grep(/^$package$/, keys %$naked_packages));
+        use Data::Dumper;
+        warn 'STR'x20 . __FILE__ . ':' . __LINE__ ;
+        warn Dumper $package;
+        warn 'END'x20 . __FILE__ . ':' . __LINE__ ;
+        
         pod_coverage_ok($package, {private => []});
     }
 }
