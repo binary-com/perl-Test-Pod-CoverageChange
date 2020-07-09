@@ -1,10 +1,9 @@
-#!/usr/bin/perl
 package t::PodSyntaxError;
 
 use warnings;
 use strict;
 
-=head2 foo
+=head2 bar
 
 This pod has a syntax error. (=over has no =back to close)
 
@@ -15,15 +14,6 @@ This pod has a syntax error. (=over has no =back to close)
 =cut
 
 sub foo {}
-
-=head2 bar
-
-=over 4
-
-=item * first item
-
-=cut
-
 sub bar {}
 sub baz {}
 
