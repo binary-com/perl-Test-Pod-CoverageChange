@@ -1,4 +1,4 @@
-package t::Nopod;
+package Nopod;
 
 use warnings;
 use strict;
