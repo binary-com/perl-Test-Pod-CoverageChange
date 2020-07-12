@@ -32,6 +32,7 @@ use Pod::Checker;
 use Pod::Coverage;
 use File::Find::Rule;
 use Test::Pod::Coverage;
+use Module::Path 'module_path';
 
 our $VERSION='0.01';
 
@@ -63,13 +64,14 @@ Check all modules under the given directory against POD coverage and POD syntax
 
 sub check {
     my $path = shift;
-    my $naked_packages = shift;
-    my $ignored_packages = shift;
+    my $naked_packages = shift // {};
+    my $ignored_packages = shift // [];
 
     $path = [$path] unless ref $path eq 'ARRAY';
+    $ignored_packages = [$ignored_packages] unless ref $ignored_packages eq 'ARRAY';
 
     check_pod_coverage($path, $naked_packages, $ignored_packages);
-    check_pod_syntax($path);
+    check_pod_syntax($path, $ignored_packages);
 
     Test::Pod::CoverageChange->export_to_level(1, @_);
 }
@@ -82,14 +84,15 @@ Todo:: complete this pod
 
 sub check_pod_coverage {
     my $directories = shift;
-    my $naked_packages = shift;
+    my $allowed_naked_packages = shift;
     my $ignored_packages = shift;
 
-    check_existing_naked_packages($naked_packages, $ignored_packages) if defined $naked_packages;
+    check_existing_naked_packages($allowed_naked_packages, $ignored_packages) if keys %$allowed_naked_packages;
 
     # Check for newly added packages PODs
+    my @ignored_packages = (keys %$allowed_naked_packages, @$ignored_packages);
     foreach my $package (Test::Pod::Coverage::all_modules(@$directories)) {
-        next if $naked_packages && (grep(/^$package$/, keys %$naked_packages));
+        next if @ignored_packages && (grep(/^$package$/, @ignored_packages));
         pod_coverage_ok($package, {private => []});
     }
 }
@@ -102,14 +105,23 @@ Todo:: complete this pod
 
 sub check_pod_syntax {
     my $directories = shift;
+    my $ignored_packages = shift;
+
+    my @ignored_packages_full_path = ();
+    for (@$ignored_packages) {
+        my $file_path = module_path($_);
+        push(@ignored_packages_full_path, $file_path) if defined $file_path;
+    }
+
     my @files_path = File::Find::Rule->file()
                                      ->name( '*.p[m|l]' )
                                      ->in(@$directories);
 
     for my $file_path (@files_path) {
         chomp $file_path;
-        my $check_result = podchecker($file_path);
+        next if @ignored_packages_full_path && grep(/$file_path/, @ignored_packages_full_path);
 
+        my $check_result = podchecker($file_path);
         if ($check_result == POD_SYNTAX_IS_OK){
             pass sprintf("Pod structure is OK in the file %s.", $file_path);
         } elsif ($check_result == FILE_HAS_NO_POD) {
