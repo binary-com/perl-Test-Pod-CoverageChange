@@ -64,11 +64,12 @@ Check all modules under the given directory against POD coverage and POD syntax
 sub check {
     my $path = shift;
     my $naked_packages = shift;
+    my $ignored_packages = shift;
 
     $path = [$path] unless ref $path eq 'ARRAY';
 
-    check_pod_coverage($path, $naked_packages);
-    # check_pod_syntax($path);
+    check_pod_coverage($path, $naked_packages, $ignored_packages);
+    check_pod_syntax($path);
 
     Test::Pod::CoverageChange->export_to_level(1, @_);
 }
@@ -82,17 +83,13 @@ Todo:: complete this pod
 sub check_pod_coverage {
     my $directories = shift;
     my $naked_packages = shift;
+    my $ignored_packages = shift;
 
-    check_existing_naked_packages($naked_packages) if defined $naked_packages;
+    check_existing_naked_packages($naked_packages, $ignored_packages) if defined $naked_packages;
 
     # Check for newly added packages PODs
     foreach my $package (Test::Pod::Coverage::all_modules(@$directories)) {
         next if $naked_packages && (grep(/^$package$/, keys %$naked_packages));
-        use Data::Dumper;
-        warn 'STR'x20 . __FILE__ . ':' . __LINE__ ;
-        warn Dumper $package;
-        warn 'END'x20 . __FILE__ . ':' . __LINE__ ;
-        
         pod_coverage_ok($package, {private => []});
     }
 }
@@ -105,8 +102,6 @@ Todo:: complete this pod
 
 sub check_pod_syntax {
     my $directories = shift;
-    $directories = [$directories] if ref $directories ne 'ARRAY';
-
     my @files_path = File::Find::Rule->file()
                                      ->name( '*.p[m|l]' )
                                      ->in(@$directories);
@@ -136,10 +131,13 @@ Todo:: complete this pod
 
 sub check_existing_naked_packages {
     my $naked_packages = shift;
+    my $ignored_packages = shift;
 
     # Note: We can remove this foreach section if the %naked_packages hash be empty.
     # Check for the currently naked packages POD.
     foreach my $package (sort keys %$naked_packages) {
+        next if $ignored_packages && (grep(/^$package$/, @$ignored_packages));
+
         my $pc = Pod::Coverage->new(package => $package, private => []);
         my $fully_covered = defined $pc->coverage && $pc->coverage == 1;
         my $coverage_percentage = defined $pc->coverage ? $pc->coverage * 100 : 0;
