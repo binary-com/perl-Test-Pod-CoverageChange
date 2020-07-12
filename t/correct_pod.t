@@ -14,7 +14,7 @@ BEGIN {
     use_ok( 'Test::Pod::CoverageChange' );
 }
 
-subtest 'Module with no pod, unexpected' => sub {
+subtest 'Module has perfect pod' => sub {
     test_out("ok 1 - Pod coverage on $test_module");
     test_out("ok 2 - Pod structure is OK in the file $test_module_path.");
     Test::Pod::CoverageChange::check($test_module_path);

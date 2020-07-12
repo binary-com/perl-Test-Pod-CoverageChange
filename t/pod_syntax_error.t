@@ -10,7 +10,7 @@ BEGIN {
     use_ok( 't::PodSyntaxError');
 }
 
-subtest 'Module with no pod, unexpected' => sub {
+subtest 'Module has a pod syntax error' => sub {
     my $test_module = "t::PodSyntaxError";
     my $test_module_path = 't/PodSyntaxError.pm';
     my $main_module_path = module_path('Test::Pod::CoverageChange');
