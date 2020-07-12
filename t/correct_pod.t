@@ -1,6 +1,5 @@
 use warnings;
 use strict;
-# use lib "/home/git/regentmarkets/perl-Test-Pod-CoverageChange/t";
 use lib "t";
 use Test::More tests => 2;
 use Test::Builder::Tester;
@@ -20,4 +19,3 @@ subtest 'Module has perfect pod' => sub {
     Test::Pod::CoverageChange::check($test_module_path);
     test_test( "Pods are completely correct." );
 };
-
