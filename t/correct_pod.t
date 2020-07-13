@@ -1,14 +1,13 @@
 use strict;
 use warnings;
 
-use lib "t";
+# use lib "t";
 use Test::More tests => 2;
 use Test::Builder::Tester;
 use Module::Path 'module_path';
 
 my $test_module = "t::CorrectPod";
 my $test_module_path = 't/CorrectPod.pm';
-# my $main_module_path = module_path('Test::Pod::CoverageChange');
 
 BEGIN {
     use_ok( 'Test::Pod::CoverageChange' );

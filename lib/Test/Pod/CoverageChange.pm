@@ -9,21 +9,24 @@ Pod coverage calculator test file.
 
 =head1 SYNOPSIS
 
-It checks all files that placed under the `lib` folder against their POD coverage to see if all existing functions have POD or not?
-It checks all files that placed under the `lib` folder against their POD syntax to see if they have a valid POD syntax or not.
+It checks all files that placed under a given directory against their
+POD coverage to see if all existing subs have POD and also
+POD syntax to see if is there an POD syntax error or not?
 
 =head1 DESCRIPTION
 
-Prints the percentage of POD coverage in **TODO** test format for currently existing packages.
-Prints B<not ok> (with respective message) if our latest changes increased/decreased numbers of naked functions in currently existing packages.
-Prints B<not ok> if currently existing packages have 100% coverage unless you remove the package from B<%naked_packages> variable.
+Prints the percentage of POD coverage in B<TODO> test format for the packages that we allowed to have naked subs.
+Prints an error message if our latest changes increased/decreased numbers of naked sub for the packages that we allowed to have naked sub.
+Prints an error message if a naked allowed package has 100% POD coverage. (We should remove it from the C<%naked_packages> variable list.)
+Ignores to check every package that we pass as C<@ignored_package>
 Prints a proper message for the newly added packages.
 
-prints B<ok> for the files that have no POD syntax error.
-prints B<not ok- There is no POD in the file> if the file has no POD at all. I put this into a TODO test so CircleCI's tests will pass.
-prints B<not ok- The number of errors in the POD structure> if the file has any error. It causes CircleCI's tests to fail.
+Prints C<ok> for the files that have no POD syntax error.
+Prints C<not ok- There is no POD in the file> if the file has no POD at all. I will consider as a pass test since it is in a todo section.
+Prints C<not ok- The number of errors in the POD structure> if the file has any error. It causes tests to be fail.
 
 =cut
+
 use strict;
 use warnings;
 
@@ -44,13 +47,14 @@ use constant {
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(check);
 
+# Set caller test file name
+my $caller_test_file = (caller())[1];
+
 =pod
 
 =head2 check
 
-Todo: Update this pod
-
-Check all modules under the given directory against POD coverage and POD syntax
+Check all modules under a given directory against POD coverage and POD syntax
 
 =over 4
 
@@ -58,27 +62,45 @@ Check all modules under the given directory against POD coverage and POD syntax
 
 =item * C<naked_packages> A hashref that contains some packages which are allowed to have naked subs.
 
+=item * C<ignored_packages> An arrayref that contains some packages which we are going to ignore to check.
+
 =back
 
 =cut
 
 sub check {
     my $path = shift;
-    my $naked_packages = shift // {};
+    my $allowed_naked_packages = shift // {};
     my $ignored_packages = shift // [];
 
     $path = [$path] unless ref $path eq 'ARRAY';
     $ignored_packages = [$ignored_packages] unless ref $ignored_packages eq 'ARRAY';
 
-    check_pod_coverage($path, $naked_packages, $ignored_packages);
+    check_pod_coverage($path, $allowed_naked_packages, $ignored_packages);
     check_pod_syntax($path, $ignored_packages);
-
-    Test::Pod::CoverageChange->export_to_level(1, @_);
 }
 
 =head2 check_pod_coverage
 
-Todo:: complete this pod
+Checks POD coverage for all the modules that exists under a given directory.
+Passes the $allowed_naked_packages to the L<Test::Pod::CoverageChange::check_allowed_naked_packages>
+Ignores the packages in the C<$ignored_packages> parameter
+
+=over 4
+
+=item C<$directories> Arrayref|String - I works on all the modules that lies under this given directory(ies).
+
+example: ['lib', 'other directory'] | 'lib'
+
+=item C<allowed_naked_packages> Hashref - These packages are allowed to have naked subs equal to specified numbers.
+
+example: {Package1 => 2, Package2 => 1, Package3 => 10}
+
+=item C<ignored_packages> - Arrayref - These pacakges will be ignored in checks.
+
+example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
+
+=back
 
 =cut
 
@@ -87,7 +109,7 @@ sub check_pod_coverage {
     my $allowed_naked_packages = shift;
     my $ignored_packages = shift;
 
-    check_existing_naked_packages($allowed_naked_packages, $ignored_packages) if keys %$allowed_naked_packages;
+    check_allowed_naked_packages($allowed_naked_packages, $ignored_packages) if keys %$allowed_naked_packages;
 
     # Check for newly added packages PODs
     my @ignored_packages = (keys %$allowed_naked_packages, @$ignored_packages);
@@ -99,7 +121,19 @@ sub check_pod_coverage {
 
 =head2 check_pod_syntax
 
-Todo:: complete this pod
+Check POD syntax for all the modules that exists under a given directory.
+
+=over 4
+
+=item C<directories> Arrayref|String - I works on all the modules that lies under this given directory(ies).
+
+example: ['lib', 'other directory'] | 'lib'
+
+=item C<ignored_packages> - Arrayref - These pacakges will be ignored in checks. (optional)
+
+example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
+
+=back
 
 =cut
 
@@ -135,25 +169,40 @@ sub check_pod_syntax {
     }
 }
 
-=head2 check_existing_naked_packages
+=head2 check_allowed_naked_packages
 
-Todo:: complete this pod
+Checks passed allowed_naked_packages against existing package files and prints
+
+=over 4
+
+=item C<directories> Arrayref|String - I works on all the modules that lies under this given directory(ies).
+
+example: ['lib', 'other directory'] | 'lib'
+
+=item C<ignored_packages> - Arrayref - These pacakges will be ignored in checks. (optional)
+
+example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
+
+=back
+
+Prints C<Todo fail> message if the numbers of existing naked subs are equal to passed value.
+Prints a normal C<fail> message if the numbers of existing naked subs are more/less than the passed value.
+Prints a normal C<fail> message if a package has 100% POD coverage and it passed as a naked_package.
 
 =cut
 
-sub check_existing_naked_packages {
-    my $naked_packages = shift;
+sub check_allowed_naked_packages {
+    my $allowed_naked_packages = shift;
     my $ignored_packages = shift;
 
-    # Note: We can remove this foreach section if the %naked_packages hash be empty.
     # Check for the currently naked packages POD.
-    foreach my $package (sort keys %$naked_packages) {
+    foreach my $package (sort keys %$allowed_naked_packages) {
         next if $ignored_packages && (grep(/^$package$/, @$ignored_packages));
 
         my $pc = Pod::Coverage->new(package => $package, private => []);
         my $fully_covered = defined $pc->coverage && $pc->coverage == 1;
         my $coverage_percentage = defined $pc->coverage ? $pc->coverage * 100 : 0;
-        my $max_expected_naked_subs = $naked_packages->{$package};
+        my $max_expected_naked_subs = $allowed_naked_packages->{$package};
         my $naked_subs_count = scalar $pc->naked // scalar $pc->_get_syms($package);
 
         TODO: {
@@ -166,9 +215,9 @@ sub check_existing_naked_packages {
         }
 
         if(!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
-            fail sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, __FILE__);
+            fail sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file);
 Your last changes decreased the number of naked subs in the %s package.
-Change the %s => %s in the %%naked_packages variable in %s please.
+Change the %s => %s in the $allowed_naked_packages variable in %s please.
 MESSAGE
             next;
         }
@@ -177,10 +226,9 @@ MESSAGE
             next;
         }
 
-
         if ($fully_covered) {
-            fail sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file %%naked_packages variable to fix this error.',
-              $package, __FILE__);
+            fail sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
+              $package, $caller_test_file);
         }
     }
 }
