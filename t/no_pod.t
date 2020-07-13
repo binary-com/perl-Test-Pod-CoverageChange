@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 
-use lib "t";
 use Test::More;
 use Test::Builder::Tester;
 use Module::Path 'module_path';
