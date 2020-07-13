@@ -1,7 +1,7 @@
 package t::CorrectPod;
 
-use warnings;
 use strict;
+use warnings;
 
 =head1 DESCRIPTION
 

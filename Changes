@@ -1,7 +1,5 @@
-{{$NEXT}}
-
 Revision history for test-pod-coverage-syntax
 
-0.01      2020-06-26 00:00:00+00:00 UTC
-        First version, released on an unsuspecting world.
+{{$NEXT}}
+    Initial version.
 

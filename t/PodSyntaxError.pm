@@ -1,7 +1,7 @@
 package t::PodSyntaxError;
 
-use warnings;
 use strict;
+use warnings;
 
 =head2 bar
 

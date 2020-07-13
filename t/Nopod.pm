@@ -1,7 +1,7 @@
 package t::Nopod;
 
-use warnings;
 use strict;
+use warnings;
 
 # No Pod exists in this file
 #
