@@ -18,7 +18,7 @@ Prints **not ok- The number of errors in the POD structure** if the file has any
 
 # AUTHOR
 
-Ramin Sadeghnasab <ramin@email.com>
+Deriv Services Ltd. C<< DERIV@cpan.org >>.
 
 # COPYRIGHT AND LICENSE
 
