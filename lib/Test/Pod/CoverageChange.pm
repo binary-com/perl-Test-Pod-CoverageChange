@@ -9,11 +9,23 @@ Pod coverage calculator test file.
 
 =head1 SYNOPSIS
 
+    use Test::Pod::CoverageChange qw(check);
+
+    Test::Pod::CoverageChange::check('lib', {
+        Module::With::3::expected::naked::subs              => 3,
+        AnotherModule::With::10::expected::naked::subs      => 10,
+        YetAnotherModule::With::1::expected::naked::subs    => 1,
+        YetAnotherModule::With::5::expected::naked::subs    => 5,
+    }, [
+        We::Ignore::ThisModule,
+        We::Also::Ignore::This::Module
+    ]);
+
+=head1 DESCRIPTION
+
 It checks all files that placed under a given directory against their
 POD coverage to see if all existing subs have POD and also
 POD syntax to see if is there an POD syntax error or not?
-
-=head1 DESCRIPTION
 
 Prints the percentage of POD coverage in B<TODO> test format for the packages that we allowed to have naked subs.
 Prints an error message if our latest changes increased/decreased numbers of naked sub for the packages that we allowed to have naked sub.
@@ -37,11 +49,11 @@ use File::Find::Rule;
 use Test::Pod::Coverage;
 use Module::Path 'module_path';
 
-our $VERSION='0.01';
+our $VERSION = '0.01';
 
 use constant {
-  POD_SYNTAX_IS_OK => 0,
-  FILE_HAS_NO_POD => -1,
+    POD_SYNTAX_IS_OK => 0,
+    FILE_HAS_NO_POD  => -1,
 };
 
 use Exporter qw(import export_to_level);
@@ -73,8 +85,8 @@ sub check {
     my $allowed_naked_packages = shift // {};
     my $ignored_packages = shift // [];
 
-    $path = [$path] unless ref $path eq 'ARRAY';
-    $ignored_packages = [$ignored_packages] unless ref $ignored_packages eq 'ARRAY';
+    $path = [ $path ] unless ref $path eq 'ARRAY';
+    $ignored_packages = [ $ignored_packages ] unless ref $ignored_packages eq 'ARRAY';
 
     check_pod_coverage($path, $allowed_naked_packages, $ignored_packages);
     check_pod_syntax($path, $ignored_packages);
@@ -114,8 +126,8 @@ sub check_pod_coverage {
     # Check for newly added packages PODs
     my @ignored_packages = (keys %$allowed_naked_packages, @$ignored_packages);
     foreach my $package (Test::Pod::Coverage::all_modules(@$directories)) {
-        next if @ignored_packages && (any { $_ eq $package } @ignored_packages));
-        pod_coverage_ok($package, {private => []});
+        next if @ignored_packages && (any {$_ eq $package} @ignored_packages);
+        pod_coverage_ok($package, { private => [] });
     }
 }
 
@@ -148,22 +160,24 @@ sub check_pod_syntax {
     }
 
     my @files_path = File::Find::Rule->file()
-                                     ->name( '*.p[m|l]' )
-                                     ->in(@$directories);
+        ->name('*.p[m|l]')
+        ->in(@$directories);
 
     for my $file_path (@files_path) {
         chomp $file_path;
-        next if @ignored_packages_full_path && grep(/$file_path/, @ignored_packages_full_path);
+        next if @ignored_packages_full_path && grep (/$file_path/, @ignored_packages_full_path);
 
         my $check_result = podchecker($file_path);
-        if ($check_result == POD_SYNTAX_IS_OK){
+        if ($check_result == POD_SYNTAX_IS_OK) {
             pass sprintf("Pod structure is OK in the file %s.", $file_path);
-        } elsif ($check_result == FILE_HAS_NO_POD) {
+        }
+        elsif ($check_result == FILE_HAS_NO_POD) {
             TODO: {
                 local $TODO = sprintf("There is no POD in the file %s.", $file_path);
                 fail;
             }
-        } else {
+        }
+        else {
             fail sprintf("There are %d errors in the POD structure in the %s.", $check_result, $file_path);
         }
     }
@@ -197,7 +211,7 @@ sub check_allowed_naked_packages {
 
     # Check for the currently naked packages POD.
     foreach my $package (sort keys %$allowed_naked_packages) {
-        next if $ignored_packages && (grep(/^$package$/, @$ignored_packages));
+        next if $ignored_packages && (grep (/^$package$/, @$ignored_packages));
 
         my $pc = Pod::Coverage->new(package => $package, private => []);
         my $fully_covered = defined $pc->coverage && $pc->coverage == 1;
@@ -214,21 +228,21 @@ sub check_allowed_naked_packages {
             }
         }
 
-        if(!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
+        if (!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
             fail sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file);
 Your last changes decreased the number of naked subs in the %s package.
 Change the %s => %s in the $allowed_naked_packages variable in %s please.
 MESSAGE
             next;
         }
-        elsif(!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
+        elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
             fail sprintf('Your last changes increased the number of naked subs in the %s package.', $package);
             next;
         }
 
         if ($fully_covered) {
             fail sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
-              $package, $caller_test_file);
+                $package, $caller_test_file);
         }
     }
 }
