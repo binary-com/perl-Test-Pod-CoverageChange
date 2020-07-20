@@ -44,7 +44,7 @@ use constant {
   FILE_HAS_NO_POD => -1,
 };
 
-our @ISA = qw(Exporter);
+use Exporter qw(import export_to_level);
 our @EXPORT_OK = qw(check);
 
 # Set caller test file name
