@@ -114,7 +114,7 @@ sub check_pod_coverage {
     # Check for newly added packages PODs
     my @ignored_packages = (keys %$allowed_naked_packages, @$ignored_packages);
     foreach my $package (Test::Pod::Coverage::all_modules(@$directories)) {
-        next if @ignored_packages && (grep(/^$package$/, @ignored_packages));
+        next if @ignored_packages && (any { $_ eq $package } @ignored_packages));
         pod_coverage_ok($package, {private => []});
     }
 }
