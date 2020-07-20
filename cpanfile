@@ -1,22 +1,22 @@
-requires "Exporter" => "0";
-requires "Pod::Checker" => "0";
-requires "Pod::Coverage" => "0";
-requires "Test::More" => "0";
-requires "Test::Pod::Coverage" => "0";
-requires "constant" => "0";
+requires "Exporter";
+requires "Pod::Checker";
+requires "Pod::Coverage";
+requires "Test::More";
+requires "Test::Pod::Coverage";
+requires "constant";
 
 on 'test' => sub {
-  requires "File::Spec" => "0";
-  requires "IO::Handle" => "0";
-  requires "IPC::Open3" => "0";
-  requires "Test::More" => "0";
-  requires "perl" => "5.006";
+    requires "File::Spec";
+    requires "IO::Handle";
+    requires "IPC::Open3";
+    requires "Test::More";
+    requires "perl", ">= 5.006";
 };
 
 on 'configure' => sub {
-  requires "ExtUtils::MakeMaker" => "0";
+    requires "ExtUtils::MakeMaker";
 };
 
 on 'develop' => sub {
-  requires "Test::Pod" => "1.41";
+    requires "Test::Pod", "1.41";
 };
