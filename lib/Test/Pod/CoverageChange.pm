@@ -58,7 +58,7 @@ Check all modules under a given directory against POD coverage and POD syntax
 
 =over 4
 
-=item * C<directory> An arrayref of directories to check pod against
+=item * C<directory> - arrayref of directories to check pod against
 
 =item * C<naked_packages> A hashref that contains some packages which are allowed to have naked subs.
 
