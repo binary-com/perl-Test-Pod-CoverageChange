@@ -71,11 +71,11 @@ Check all modules under a given directory against POD coverage and POD syntax
 
 =over 4
 
-=item * C<directory> - arrayref of directories to check pod against
+=item * C<directories> - directories to check recursively, supports string or arrayref
 
-=item * C<naked_packages> A hashref that contains some packages which are allowed to have naked subs.
+=item * C<naked_packages> packages that are allowed to have naked subs, supports hashref.
 
-=item * C<ignored_packages> An arrayref that contains some packages which we are going to ignore to check.
+=item * C<ignored_packages> packages that we are going to ignore to check, supports arrayref
 
 =back
 
@@ -101,15 +101,15 @@ Ignores the packages in the C<$ignored_packages> parameter
 
 =over 4
 
-=item C<$directories> - directories to check recursively, supports string or arrayref
+=item C<directories> - Directories to check recursively, supports string or arrayref
 
 example: ['lib', 'other directory'] | 'lib'
 
-=item C<allowed_naked_packages> Hashref - These packages are allowed to have naked subs equal to specified numbers.
+=item C<allowed_naked_packages> These packages are allowed to have naked subs equal to specified numbers.
 
 example: {Package1 => 2, Package2 => 1, Package3 => 10}
 
-=item C<ignored_packages> - Arrayref - These pacakges will be ignored in checks.
+=item C<ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
 
 example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 
@@ -138,11 +138,11 @@ Check POD syntax for all the modules that exists under a given directory.
 
 =over 4
 
-=item C<directories> Arrayref|String - I works on all the modules that lies under this given directory(ies).
+=item C<directories> - Directories to check recursively, supports string or arrayref
 
 example: ['lib', 'other directory'] | 'lib'
 
-=item C<ignored_packages> - Arrayref - These pacakges will be ignored in checks. (optional)
+=item C<ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
 
 example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 
@@ -190,17 +190,17 @@ Checks passed allowed_naked_packages against existing package files and prints
 
 =over 4
 
-=item C<directories> Arrayref|String - I works on all the modules that lies under this given directory(ies).
+=item C<directories> - Directories to check recursively, supports string or arrayref
 
 example: ['lib', 'other directory'] | 'lib'
 
-=item C<ignored_packages> - Arrayref - These pacakges will be ignored in checks. (optional)
+=item C<ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
 
 example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 
 =back
 
-Prints C<Todo fail> message if the numbers of existing naked subs are equal to passed value.
+Prints C<todo fail> message if the numbers of existing naked subs are equal to passed value.
 Prints a normal C<fail> message if the numbers of existing naked subs are more/less than the passed value.
 Prints a normal C<fail> message if a package has 100% POD coverage and it passed as a naked_package.
 
