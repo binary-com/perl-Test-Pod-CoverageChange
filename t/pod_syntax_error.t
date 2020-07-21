@@ -1,14 +1,14 @@
 use strict;
 use warnings;
 
+use Dir::Self;
+use lib __DIR__ . '/..';
 use Test::More;
 use Test::Builder::Tester;
 use Module::Path 'module_path';
 
-BEGIN {
-    use_ok( 'Test::Pod::CoverageChange' );
-    use_ok( 't::PodSyntaxError');
-}
+use Test::Pod::CoverageChange;
+use t::PodSyntaxError;
 
 subtest 'Module has a pod syntax error' => sub {
     my $test_module = "t::PodSyntaxError";

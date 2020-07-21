@@ -3,9 +3,10 @@ use warnings;
 
 use Test::More;
 use Test::Builder::Tester;
-use Test::Pod::CoverageChange;
 use Dir::Self;
 use lib __DIR__ . '/..';
+
+use Test::Pod::CoverageChange;
 
 my $test_module = "t::CorrectPod";
 my $test_module_path = 't/CorrectPod.pm';

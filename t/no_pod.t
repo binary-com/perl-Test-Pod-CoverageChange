@@ -1,14 +1,14 @@
 use strict;
 use warnings;
 
+use Dir::Self;
+use lib __DIR__ . '/..';
 use Test::More;
 use Test::Builder::Tester;
 use Module::Path 'module_path';
 
-BEGIN {
-    use_ok( 'Test::Pod::CoverageChange' );
-    use_ok('t::Nopod');
-}
+use Test::Pod::CoverageChange;
+use t::Nopod;
 
 # Initializing variables
 my $test_module = "t::Nopod";
@@ -33,7 +33,7 @@ subtest 'We can expect module naked sub' => sub {
 
 subtest 'Ignore some tests' => sub {
     Test::Pod::CoverageChange::check($test_module_path, {}, ['t::Nopod']);
-    pass('Bad Pods ignored successfully.');
+    pass('Even bad Pods can be ignored successfully.');
 };
 
 done_testing;
