@@ -36,4 +36,4 @@ subtest 'Ignore some tests' => sub {
     pass('Bad Pods ignored successfully.');
 };
 
-done_testing();
+done_testing;
