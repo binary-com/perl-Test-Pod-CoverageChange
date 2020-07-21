@@ -101,7 +101,7 @@ Ignores the packages in the C<$ignored_packages> parameter
 
 =over 4
 
-=item C<$directories> Arrayref|String - I works on all the modules that lies under this given directory(ies).
+=item C<$directories> - directories to check recursively, supports string or arrayref
 
 example: ['lib', 'other directory'] | 'lib'
 
