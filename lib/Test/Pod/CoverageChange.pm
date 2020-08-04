@@ -34,7 +34,7 @@ Ignores to check every package that we pass as C<@ignored_package>
 Prints a proper message for the newly added packages.
 
 Prints C<ok> for the files that have no POD syntax error.
-Prints C<not ok- There is no POD in the file> if the file has no POD at all. I will consider as a pass test since it is in a todo section.
+If the file has no POD at all, it will generate a failing TODO test.
 Prints C<not ok- The number of errors in the POD structure> if the file has any error. It causes tests to be fail.
 
 =cut
