@@ -63,6 +63,9 @@ our @EXPORT_OK = qw(check);
 # Set caller test file name
 my $caller_test_file = (caller())[1];
 
+# Create a test builder object
+my $Test_Builder = Test::More->builder;
+
 =pod
 
 =head2 check
@@ -170,16 +173,13 @@ sub check_pod_syntax {
 
         my $check_result = podchecker($file_path);
         if ($check_result == POD_SYNTAX_IS_OK) {
-            pass sprintf("Pod structure is OK in the file %s.", $file_path);
+            $Test_Builder->ok(1, sprintf("Pod structure is OK in the file %s.", $file_path));
         }
         elsif ($check_result == FILE_HAS_NO_POD) {
-            TODO: {
-                local $TODO = sprintf("There is no POD in the file %s.", $file_path);
-                fail;
-            }
+            $Test_Builder->todo_skip(sprintf("There is no POD in the file %s.", $file_path));
         }
         else {
-            fail sprintf("There are %d errors in the POD structure in the %s.", $check_result, $file_path);
+            $Test_Builder->diag(sprintf("There are %d errors in the POD structure in the %s.", $check_result, $file_path));
         }
     }
 }
@@ -220,30 +220,25 @@ sub check_allowed_naked_packages {
         my $max_expected_naked_subs = $allowed_naked_packages->{$package};
         my $naked_subs_count = scalar $pc->naked // scalar $pc->_get_syms($package);
 
-        TODO: {
-            local $TODO;
-
-            if (!$fully_covered) {
-                $TODO = sprintf("We have %.2f%% POD coverage for the module '%s'.", $coverage_percentage, $package);
-                fail;
-            }
+        if (!$fully_covered) {
+            $Test_Builder->todo_skip(sprintf("We have %.2f%% POD coverage for the module '%s'.", $coverage_percentage, $package));
         }
 
         if (!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
-            fail sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file);
+            $Test_Builder->diag(sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file));
 Your last changes decreased the number of naked subs in the %s package.
 Change the %s => %s in the $allowed_naked_packages variable in %s please.
 MESSAGE
             next;
         }
         elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
-            fail sprintf('Your last changes increased the number of naked subs in the %s package.', $package);
+            $Test_Builder->diag(sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
             next;
         }
 
         if ($fully_covered) {
-            fail sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
-                $package, $caller_test_file);
+            $Test_Builder->diag(sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
+                $package, $caller_test_file));
         }
     }
 }
