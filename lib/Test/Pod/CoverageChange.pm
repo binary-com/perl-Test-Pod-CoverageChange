@@ -9,7 +9,7 @@ use utf8;
 package Test::Pod::CoverageChange;
 # ABSTRACT: check perl modules against their pod coverage
 
-=pod
+=encoding utf8
 
 =head1 NAME
 
@@ -62,9 +62,6 @@ use constant {
 
 use Exporter qw(import export_to_level);
 our @EXPORT_OK = qw(check);
-
-# Create a test builder object
-my $Test_Builder = Test::More->builder;
 
 =head2 check
 
@@ -154,6 +151,7 @@ example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 sub check_pod_syntax {
     my $path = shift;
     my $ignored_packages = shift;
+    my $Test_Builder = Test::More->builder;
 
     my @ignored_packages_full_path = ();
     for (@$ignored_packages) {
@@ -207,8 +205,8 @@ Prints a normal C<fail> message if a package has 100% POD coverage and it passed
 sub check_allowed_naked_packages {
     my $allowed_naked_packages = shift;
     my $ignored_packages = shift;
-    # Set caller test file name
     my $caller_test_file = (caller())[1];
+    my $Test_Builder = Test::More->builder;
 
     # Check for the currently naked packages POD.
     foreach my $package (sort keys %$allowed_naked_packages) {
