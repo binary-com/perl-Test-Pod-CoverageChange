@@ -74,7 +74,7 @@ Check all modules under a given directory against POD coverage and POD syntax
 
 =over 4
 
-=item * C<directories> - directories to check recursively, supports string or arrayref
+=item * C<$path> - path or arrayref of directories to check (recursively)
 
 =item * C<naked_packages> packages that are allowed to have naked subs, supports hashref.
 
