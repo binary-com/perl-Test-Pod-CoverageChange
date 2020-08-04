@@ -9,7 +9,7 @@ on 'test' => sub {
     requires "File::Spec";
     requires "IO::Handle";
     requires "IPC::Open3";
-    requires "Test::More", "0.98";
+    requires "Test::More", ">= 0.98";
 };
 
 on 'configure' => sub {
