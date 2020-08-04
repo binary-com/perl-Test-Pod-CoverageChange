@@ -1,3 +1,11 @@
+use strict;
+use warnings;
+
+our $VERSION = '0.001';
+# AUTHORITY
+
+use utf8;
+
 package Test::Pod::CoverageChange;
 # ABSTRACT: check perl modules against their pod coverage
 
@@ -39,9 +47,6 @@ Prints C<not ok- The number of errors in the POD structure> if the file has any 
 
 =cut
 
-use strict;
-use warnings;
-
 use Test::More;
 use Pod::Checker;
 use Pod::Coverage;
@@ -49,8 +54,6 @@ use File::Find::Rule;
 use Test::Pod::Coverage;
 use Module::Path qw(module_path);
 use List::Util qw(any);
-
-our $VERSION = '0.01';
 
 use constant {
     POD_SYNTAX_IS_OK => 0,
@@ -60,13 +63,8 @@ use constant {
 use Exporter qw(import export_to_level);
 our @EXPORT_OK = qw(check);
 
-# Set caller test file name
-my $caller_test_file = (caller())[1];
-
 # Create a test builder object
 my $Test_Builder = Test::More->builder;
-
-=pod
 
 =head2 check
 
@@ -104,7 +102,7 @@ Ignores the packages in the C<$ignored_packages> parameter
 
 =over 4
 
-=item C<directories> - Directories to check recursively, supports string or arrayref
+=item C<path> - path to check recursively, supports string or arrayref
 
 example: ['lib', 'other directory'] | 'lib'
 
@@ -121,7 +119,7 @@ example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 =cut
 
 sub check_pod_coverage {
-    my $directories = shift;
+    my $path = shift;
     my $allowed_naked_packages = shift;
     my $ignored_packages = shift;
 
@@ -129,7 +127,7 @@ sub check_pod_coverage {
 
     # Check for newly added packages PODs
     my @ignored_packages = (keys %$allowed_naked_packages, @$ignored_packages);
-    foreach my $package (Test::Pod::Coverage::all_modules(@$directories)) {
+    foreach my $package (Test::Pod::Coverage::all_modules(@$path)) {
         next if @ignored_packages && (any {$_ eq $package} @ignored_packages);
         pod_coverage_ok($package, { private => [] });
     }
@@ -141,7 +139,7 @@ Check POD syntax for all the modules that exists under a given directory.
 
 =over 4
 
-=item C<directories> - Directories to check recursively, supports string or arrayref
+=item * C<$path> - path or arrayref of directories to check (recursively)
 
 example: ['lib', 'other directory'] | 'lib'
 
@@ -154,7 +152,7 @@ example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 =cut
 
 sub check_pod_syntax {
-    my $directories = shift;
+    my $path = shift;
     my $ignored_packages = shift;
 
     my @ignored_packages_full_path = ();
@@ -165,7 +163,7 @@ sub check_pod_syntax {
 
     my @files_path = File::Find::Rule->file()
         ->name('*.p[m|l]')
-        ->in(@$directories);
+        ->in(@$path);
 
     for my $file_path (@files_path) {
         chomp $file_path;
@@ -190,7 +188,7 @@ Checks passed allowed_naked_packages against existing package files and prints
 
 =over 4
 
-=item C<directories> - Directories to check recursively, supports string or arrayref
+=item C<path> - path to check recursively, supports string or arrayref
 
 example: ['lib', 'other directory'] | 'lib'
 
@@ -209,6 +207,8 @@ Prints a normal C<fail> message if a package has 100% POD coverage and it passed
 sub check_allowed_naked_packages {
     my $allowed_naked_packages = shift;
     my $ignored_packages = shift;
+    # Set caller test file name
+    my $caller_test_file = (caller())[1];
 
     # Check for the currently naked packages POD.
     foreach my $package (sort keys %$allowed_naked_packages) {
