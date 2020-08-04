@@ -17,7 +17,7 @@ subtest 'Module has a pod syntax error' => sub {
 
     test_out("not ok 1 - Pod coverage on $test_module");
     test_diag("  Failed test 'Pod coverage on t::PodSyntaxError'");
-    test_diag("  at $main_module_path line 134.");
+    test_diag("  at $main_module_path line 129.");
     test_diag("Coverage for $test_module is 33.3%, with 2 naked subroutines:");
     test_err("# 	baz");
     test_err("# 	foo");
