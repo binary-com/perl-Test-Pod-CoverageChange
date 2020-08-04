@@ -47,7 +47,7 @@ use Pod::Checker;
 use Pod::Coverage;
 use File::Find::Rule;
 use Test::Pod::Coverage;
-use Module::Path 'module_path';
+use Module::Path qw(module_path);
 use List::Util qw(any);
 
 our $VERSION = '0.01';
