@@ -4,17 +4,18 @@ Wraps Test::Pod::Coverage to support undocumented subs and statistics on changed
 
 # VERSION
 
-version 0.0001
+version 0.001
 
 # SYNOPSIS
 
-It checks all files that placed under the `lib` folder against their POD syntax to see if they have a valid POD syntax or not.
+It checks all files that placed under a given path against their POD syntax and coverage
+to see if they have a valid POD syntax or not.
 
 # DESCRIPTION
 
-Prints **ok** for the files that have no POD syntax error.
-Prints **not ok- There is no POD in the file** if the file has no POD at all. I put this into a TODO test so CircleCI's tests will pass.
-Prints **not ok- The number of errors in the POD structure** if the file has any error. It causes CircleCI's tests to fail.
+It will generate **ok** if the file have no POD syntax or coverage error.
+If the file has no POD at all, it will generate a failing TODO test.
+If the file has any POD error it will generate a C<not ok> fail test and pointing to the number of errors in the POD structure.
 
 # AUTHOR
 
