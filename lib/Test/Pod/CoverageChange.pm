@@ -4,8 +4,8 @@ use warnings;
 package Test::Pod::CoverageChange;
 # ABSTRACT: check perl modules against their pod coverage
 
-# VERSION
 our $VERSION = '0.001';
+# AUTHORITY
 
 use utf8;
 
