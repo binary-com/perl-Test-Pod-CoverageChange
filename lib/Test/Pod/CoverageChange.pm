@@ -41,9 +41,9 @@ Prints an error message if a naked allowed package has 100% POD coverage. (We sh
 Ignores to check every package that we pass as C<@ignored_package>
 Prints a proper message for the newly added packages.
 
-Prints C<ok> for the files that have no POD syntax error.
+It will generate c<ok> if the file have no POD syntax or coverage error.
 If the file has no POD at all, it will generate a failing TODO test.
-Prints C<not ok- The number of errors in the POD structure> if the file has any error. It causes tests to be fail.
+If the file has any POD error it will generate a C<not ok> fail test and pointing to the number of errors in the POD structure.
 
 =cut
 
