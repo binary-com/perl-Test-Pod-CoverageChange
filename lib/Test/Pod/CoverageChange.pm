@@ -1,13 +1,13 @@
 use strict;
 use warnings;
 
-our $VERSION = '0.001';
-# AUTHORITY
-
-use utf8;
-
 package Test::Pod::CoverageChange;
 # ABSTRACT: check perl modules against their pod coverage
+
+# VERSION
+our $VERSION = '0.001';
+
+use utf8;
 
 =encoding utf8
 
