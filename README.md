@@ -15,7 +15,7 @@ to see if they have a valid POD syntax or not.
 
 It will generate **ok** if the file have no POD syntax or coverage error.
 If the file has no POD at all, it will generate a failing TODO test.
-If the file has any POD error it will generate a C<not ok> fail test and pointing to the number of errors in the POD structure.
+If the file has any POD error it will generate a **not ok** fail test and pointing to the number of errors in the POD structure.
 
 # AUTHOR
 
