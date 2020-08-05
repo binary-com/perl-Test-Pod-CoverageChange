@@ -21,17 +21,17 @@ subtest 'Module with no pod, unexpected' => sub {
     test_diag("  Failed test 'Pod coverage on $test_module'");
     test_diag("  at $main_module_path line 129.");
     test_diag("$test_module: couldn't find pod");
-    Test::Pod::CoverageChange::check($test_module_path);
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path);
     test_test("Handles files with a pod error");
     done_testing;
 };
 
 subtest 'We can expect module naked sub' => sub {
-    Test::Pod::CoverageChange::check($test_module_path, {'t::Nopod' => 3});
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 3});
 };
 
 subtest 'Ignore some tests' => sub {
-    Test::Pod::CoverageChange::check($test_module_path, {}, ['t::Nopod']);
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {}, ['t::Nopod']);
     pass('Even bad Pods can be ignored successfully.');
 };
 

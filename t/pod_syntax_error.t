@@ -23,7 +23,7 @@ subtest 'Module has a pod syntax error' => sub {
     test_err("# 	foo");
     test_diag("There are 1 errors in the POD structure in the $test_module_path.");
     warn "\n*** PLEASE IGNORE THE NEXT WARNING AND ERROR MESSAGES THEY ARE PARTS OF TESTING.";
-    Test::Pod::CoverageChange::check($test_module_path);
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path);
     test_test( "Handles files with no pod at all" );
     done_testing;
 };

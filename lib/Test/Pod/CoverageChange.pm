@@ -17,9 +17,9 @@ Pod coverage calculator test file.
 
 =head1 SYNOPSIS
 
-    use Test::Pod::CoverageChange qw(check);
+    use Test::Pod::CoverageChange qw(pod_coverage_syntax_ok);
 
-    Test::Pod::CoverageChange::check('lib', {
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok('lib', {
         Module::With::3::expected::naked::subs              => 3,
         AnotherModule::With::10::expected::naked::subs      => 10,
         YetAnotherModule::With::1::expected::naked::subs    => 1,
@@ -61,9 +61,9 @@ use constant {
 };
 
 use Exporter qw(import export_to_level);
-our @EXPORT_OK = qw(check);
+our @EXPORT_OK = qw(pod_coverage_syntax_ok);
 
-=head2 check
+=head2 pod_coverage_syntax_ok
 
 Check all modules under a given directory against POD coverage and POD syntax
 
@@ -79,7 +79,7 @@ Check all modules under a given directory against POD coverage and POD syntax
 
 =cut
 
-sub check {
+sub pod_coverage_syntax_ok {
     my $path = shift;
     my $allowed_naked_packages = shift // {};
     my $ignored_packages = shift // [];
