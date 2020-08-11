@@ -58,6 +58,7 @@ use List::Util qw(any);
 use constant {
     POD_SYNTAX_IS_OK => 0,
     FILE_HAS_NO_POD  => -1,
+    FALSE            => 0,
 };
 
 use Exporter qw(import export_to_level);
@@ -223,19 +224,19 @@ sub check_allowed_naked_packages {
         }
 
         if (!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
-            $Test_Builder->failure_output(sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file));
+            $Test_Builder->ok(FALSE, sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file));
 Your last changes decreased the number of naked subs in the %s package.
 Change the %s => %s in the %s file please.
 MESSAGE
             next;
         }
         elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
-            $Test_Builder->failure_output(sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
+            $Test_Builder->ok(FALSE, sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
             next;
         }
 
         if ($fully_covered) {
-            $Test_Builder->failure_output(sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
+            $Test_Builder->ok(FALSE, sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
                 $package, $caller_test_file));
         }
     }
