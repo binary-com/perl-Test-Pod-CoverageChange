@@ -59,6 +59,7 @@ use constant {
     POD_SYNTAX_IS_OK => 0,
     FILE_HAS_NO_POD  => -1,
     FALSE            => 0,
+    TRUE             => 1,
 };
 
 use Exporter qw(import export_to_level);
@@ -170,13 +171,13 @@ sub check_pod_syntax {
 
         my $check_result = podchecker($file_path);
         if ($check_result == POD_SYNTAX_IS_OK) {
-            $Test_Builder->ok(1, sprintf("Pod structure is OK in the file %s.", $file_path));
+            $Test_Builder->ok(TRUE, sprintf("Pod structure is OK in the file %s.", $file_path));
         }
         elsif ($check_result == FILE_HAS_NO_POD) {
             $Test_Builder->todo_skip(sprintf("There is no POD in the file %s.", $file_path));
         }
         else {
-            $Test_Builder->diag(sprintf("There are %d errors in the POD structure in the %s.", $check_result, $file_path));
+            $Test_Builder->ok(FALSE, sprintf("There are %d errors in the POD structure in the %s.", $check_result, $file_path));
         }
     }
 }
