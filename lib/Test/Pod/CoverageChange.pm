@@ -205,7 +205,7 @@ Prints a normal C<fail> message if a package has 100% POD coverage and it passed
 sub check_allowed_naked_packages {
     my $allowed_naked_packages = shift;
     my $ignored_packages = shift;
-    my $caller_test_file = (caller())[1];
+    my $caller_test_file = (caller(2))[1];
     my $Test_Builder = Test::More->builder;
 
     # Check for the currently naked packages POD.
@@ -223,19 +223,19 @@ sub check_allowed_naked_packages {
         }
 
         if (!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
-            $Test_Builder->diag(sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file));
+            $Test_Builder->failure_output(sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file));
 Your last changes decreased the number of naked subs in the %s package.
-Change the %s => %s in the $allowed_naked_packages variable in %s please.
+Change the %s => %s in the %s file please.
 MESSAGE
             next;
         }
         elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
-            $Test_Builder->diag(sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
+            $Test_Builder->failure_output(sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
             next;
         }
 
         if ($fully_covered) {
-            $Test_Builder->diag(sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
+            $Test_Builder->failure_output(sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
                 $package, $caller_test_file));
         }
     }
