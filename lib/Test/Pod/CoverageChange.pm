@@ -79,7 +79,7 @@ example: ['lib', 'other directory'] | 'lib'
 
 example: {Package1 => 2, Package2 => 1, Package3 => 10}
 
-=item C<ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
+=item C<$ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
 
 example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 
