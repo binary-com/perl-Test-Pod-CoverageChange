@@ -11,7 +11,7 @@ use Test::Pod::CoverageChange;
 use t::Nopod;
 
 # Initializing variables
-my $test_module = "t::Nopod";
+my $test_module      = "t::Nopod";
 my $test_module_path = 't/Nopod.pm';
 my $main_module_path = module_path('Test::Pod::CoverageChange');
 

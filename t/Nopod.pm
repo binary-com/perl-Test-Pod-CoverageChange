@@ -5,8 +5,8 @@ use warnings;
 
 # No Pod exists in this file
 #
-sub foo {}
-sub bar {}
-sub baz {}
+sub foo { }
+sub bar { }
+sub baz { }
 
 1;

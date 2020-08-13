@@ -13,8 +13,8 @@ This pod has a syntax error. (=over has no =back to close)
 
 =cut
 
-sub foo {}
-sub bar {}
-sub baz {}
+sub foo { }
+sub bar { }
+sub baz { }
 
 1;

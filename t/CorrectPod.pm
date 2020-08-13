@@ -15,7 +15,7 @@ this is a description for the foo sub
 
 =cut
 
-sub foo {}
+sub foo { }
 
 =head2 bar
 
@@ -23,7 +23,7 @@ this is a description for the bar sub
 
 =cut
 
-sub bar {}
+sub bar { }
 
 =head2 baz
 
@@ -31,6 +31,6 @@ this is a description for the baz sub
 
 =cut
 
-sub baz {}
+sub baz { }
 
 1;

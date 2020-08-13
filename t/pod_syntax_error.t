@@ -11,7 +11,7 @@ use Test::Pod::CoverageChange;
 use t::PodSyntaxError;
 
 subtest 'Module has a pod syntax error' => sub {
-    my $test_module = "t::PodSyntaxError";
+    my $test_module      = "t::PodSyntaxError";
     my $test_module_path = 't/PodSyntaxError.pm';
     my $main_module_path = module_path('Test::Pod::CoverageChange');
 
@@ -26,7 +26,7 @@ subtest 'Module has a pod syntax error' => sub {
     test_diag("  at $main_module_path line 94.");
     warn "\n*** PLEASE IGNORE THE NEXT WARNING AND ERROR MESSAGES THEY ARE PARTS OF TESTING.";
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path);
-    test_test( "Handles files with no pod at all" );
+    test_test("Handles files with no pod at all");
     done_testing;
 };
 

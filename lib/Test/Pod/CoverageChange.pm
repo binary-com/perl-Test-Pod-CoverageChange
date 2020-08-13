@@ -83,12 +83,12 @@ example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 =cut
 
 sub pod_coverage_syntax_ok {
-    my $path = shift;
+    my $path                   = shift;
     my $allowed_naked_packages = shift // {};
-    my $ignored_packages = shift // [];
+    my $ignored_packages       = shift // [];
 
-    $path = [ $path ] unless ref $path eq 'ARRAY';
-    $ignored_packages = [ $ignored_packages ] unless ref $ignored_packages eq 'ARRAY';
+    $path             = [$path]             unless ref $path eq 'ARRAY';
+    $ignored_packages = [$ignored_packages] unless ref $ignored_packages eq 'ARRAY';
 
     check_pod_coverage($path, $allowed_naked_packages, $ignored_packages);
     check_pod_syntax($path, $ignored_packages);
@@ -113,17 +113,17 @@ Ignores the packages in the C<$ignored_packages> parameter.
 =cut
 
 sub check_pod_coverage {
-    my $path = shift;
+    my $path                   = shift;
     my $allowed_naked_packages = shift;
-    my $ignored_packages = shift;
+    my $ignored_packages       = shift;
 
     check_allowed_naked_packages($allowed_naked_packages, $ignored_packages) if keys %$allowed_naked_packages;
 
     # Check for newly added packages PODs
     my @ignored_packages = (keys %$allowed_naked_packages, @$ignored_packages);
     foreach my $package (Test::Pod::Coverage::all_modules(@$path)) {
-        next if @ignored_packages && (any {$_ eq $package} @ignored_packages);
-        pod_coverage_ok($package, { private => [] });
+        next if @ignored_packages && (any { $_ eq $package } @ignored_packages);
+        pod_coverage_ok($package, {private => []});
     }
 }
 
@@ -142,19 +142,17 @@ Check POD syntax for all the modules that exists under a given directory.
 =cut
 
 sub check_pod_syntax {
-    my $path = shift;
+    my $path             = shift;
     my $ignored_packages = shift;
-    my $Test_Builder = Test::More->builder;
+    my $Test_Builder     = Test::More->builder;
 
     my @ignored_packages_full_path = ();
     for (@$ignored_packages) {
         my $file_path = module_path($_);
-        push @ignored_packages_full_path, $file_path  if defined $file_path;
+        push @ignored_packages_full_path, $file_path if defined $file_path;
     }
 
-    my @files_path = File::Find::Rule->file()
-        ->name('*.p[m|l]')
-        ->in(@$path);
+    my @files_path = File::Find::Rule->file()->name('*.p[m|l]')->in(@$path);
 
     for my $file_path (@files_path) {
         chomp $file_path;
@@ -191,19 +189,21 @@ C<fails> if a package has 100% POD coverage and it passed as a L<$allowed_naked_
 
 sub check_allowed_naked_packages {
     my $allowed_naked_packages = shift;
-    my $ignored_packages = shift;
-    my $caller_test_file = (caller(2))[1];
-    my $Test_Builder = Test::More->builder;
+    my $ignored_packages       = shift;
+    my $caller_test_file       = (caller(2))[1];
+    my $Test_Builder           = Test::More->builder;
 
     # Check for the currently naked packages POD.
     foreach my $package (sort keys %$allowed_naked_packages) {
         next if $ignored_packages && (grep (/^$package$/, @$ignored_packages));
 
-        my $pc = Pod::Coverage->new(package => $package, private => []);
+        my $pc = Pod::Coverage->new(
+            package => $package,
+            private => []);
         my $fully_covered = defined $pc->coverage && $pc->coverage == 1;
-        my $coverage_percentage = defined $pc->coverage ? $pc->coverage * 100 : 0;
+        my $coverage_percentage     = defined $pc->coverage ? $pc->coverage * 100 : 0;
         my $max_expected_naked_subs = $allowed_naked_packages->{$package};
-        my $naked_subs_count = scalar $pc->naked // scalar $pc->_get_syms($package);
+        my $naked_subs_count        = scalar $pc->naked // scalar $pc->_get_syms($package);
 
         if (!$fully_covered) {
             $Test_Builder->todo_skip(sprintf("We have %.2f%% POD coverage for the module '%s'.", $coverage_percentage, $package));
@@ -215,15 +215,18 @@ Your last changes decreased the number of naked subs in the %s package.
 Change the %s => %s in the %s file please.
 MESSAGE
             next;
-        }
-        elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
+        } elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
             $Test_Builder->ok(0, sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
             next;
         }
 
         if ($fully_covered) {
-            $Test_Builder->ok(0, sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
-                $package, $caller_test_file));
+            $Test_Builder->ok(
+                0,
+                sprintf(
+                    '%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
+                    $package, $caller_test_file
+                ));
         }
     }
 }
