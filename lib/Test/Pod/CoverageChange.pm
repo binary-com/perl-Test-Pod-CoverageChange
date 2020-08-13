@@ -37,9 +37,8 @@ distribution at once, via a single call to L</pod_coverage_syntax_ok>.
 
 C<passes> if the file have no POD syntax or coverage error.
 C<fails> if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
-C<fails> if a package that allowed to have naked subs has 100% POD coverage.
-C<fails> if a file in a given path has POD syntax error or has no POD at all.
-C<fails> if the file has no POD at all.
+C<fails> if a package allowed to have naked subs has 100% POD coverage.
+C<fails> if a file in a given path has POD syntax error or has no POD.
 
 Ignores to check every package that we pass as C<$ignored_package>
 

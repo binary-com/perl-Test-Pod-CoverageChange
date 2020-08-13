@@ -1,6 +1,6 @@
 # NAME
 
-Wraps Test::Pod::Coverage to support undocumented subs and statistics on changed coverage
+Wraps Test::Pod::Coverage and Pod::Checker modules to support undocumented subs and statistics on changed coverage.
 
 # VERSION
 
@@ -8,14 +8,24 @@ version 0.001
 
 # SYNOPSIS
 
-It checks all files that placed under a given path against their POD syntax and coverage
-to see if they have a valid POD syntax or not.
+    use Test::Pod::CoverageChange qw(pod_coverage_syntax_ok);
+
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok('lib', {
+        Module::With::3::expected::naked::subs              => 3,
+        AnotherModule::With::10::expected::naked::subs      => 10,
+        YetAnotherModule::With::1::expected::naked::subs    => 1,
+        YetAnotherModule::With::5::expected::naked::subs    => 5,
+    }, [
+        We::Ignore::ThisModule,
+        We::Also::Ignore::This::Module
+    ]);
 
 # DESCRIPTION
 
-It will generate **ok** if the file have no POD syntax or coverage error.
-If the file has no POD at all, it will generate a failing TODO test.
-If the file has any POD error it will generate a **not ok** fail test and pointing to the number of errors in the POD structure.
+- **passes** if the file have no POD syntax or coverage error.
+- **fails** if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
+- **fails** if a package allowed to have naked subs has 100% POD coverage.
+- **fails** if a file in a given path has POD syntax error or has no POD.
 
 # AUTHOR
 
