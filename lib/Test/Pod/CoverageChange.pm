@@ -70,7 +70,7 @@ Checks all modules under a given directory against POD coverage and POD syntax
 
 example: ['lib', 'other directory'] | 'lib'
 
-=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers (optional)
+=item * C<$allowed_naked_packages> - hashref of number of allowed naked subs, keyed by package name (optional)
 
 example: {Package1 => 2, Package2 => 1, Package3 => 10}
 
@@ -104,7 +104,7 @@ Ignores the packages in the C<$ignored_packages> parameter.
 
 =item * C<$path> - path or arrayref of directories to check (recursively)
 
-=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers (optional)
+=item * C<$allowed_naked_packages> - hashref of number of allowed naked subs, keyed by package name (optional)
 
 =item * C<$ignored_packages> - arrayref of packages that will be ignored in the checks (optional)
 
@@ -177,7 +177,7 @@ Checks passed allowed_naked_packages against existing package files.
 
 =over 4
 
-=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers (optional)
+=item * C<$allowed_naked_packages> - hashref of number of allowed naked subs, keyed by package name (optional)
 
 =item * C<$ignored_packages> - a list of packages that will be ignored in our checks, supports arrayref (optional)
 
