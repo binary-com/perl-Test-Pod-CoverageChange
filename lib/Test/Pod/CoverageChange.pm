@@ -70,11 +70,11 @@ Checks all modules under a given directory against POD coverage and POD syntax
 
 example: ['lib', 'other directory'] | 'lib'
 
-=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers. (optional)
+=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers (optional)
 
 example: {Package1 => 2, Package2 => 1, Package3 => 10}
 
-=item * C<$ignored_packages> - a list of packages that will be ignored in our checks, supports arrayref. (optional)
+=item * C<$ignored_packages> - arrayref of packages that will be ignored in the checks (optional)
 
 example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 
@@ -104,9 +104,9 @@ Ignores the packages in the C<$ignored_packages> parameter.
 
 =item * C<$path> - path or arrayref of directories to check (recursively)
 
-=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers. (optional)
+=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers (optional)
 
-=item * C<$ignored_packages> - a list of packages that will be ignored in our checks, supports arrayref. (optional)
+=item * C<$ignored_packages> - arrayref of packages that will be ignored in the checks (optional)
 
 =back
 
@@ -135,7 +135,7 @@ Check POD syntax for all the modules that exists under a given directory.
 
 =item * C<$path> - path or arrayref of directories to check (recursively)
 
-=item * C<$ignored_packages> - a list of packages that will be ignored in the checks, supports arrayref. (optional)
+=item * C<$ignored_packages> - arrayref of packages that will be ignored in the checks (optional)
 
 =back
 
@@ -177,9 +177,9 @@ Checks passed allowed_naked_packages against existing package files.
 
 =over 4
 
-=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers. (optional)
+=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers (optional)
 
-=item * C<$ignored_packages> - a list of packages that will be ignored in our checks, supports arrayref. (optional)
+=item * C<$ignored_packages> - a list of packages that will be ignored in our checks, supports arrayref (optional)
 
 =back
 
