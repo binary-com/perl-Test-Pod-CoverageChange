@@ -55,8 +55,6 @@ use List::Util qw(any);
 use constant {
     POD_SYNTAX_IS_OK => 0,
     FILE_HAS_NO_POD  => -1,
-    FALSE            => 0,
-    TRUE             => 1,
 };
 
 use Exporter qw(import export_to_level);
@@ -72,11 +70,11 @@ Checks all modules under a given directory against POD coverage and POD syntax
 
 example: ['lib', 'other directory'] | 'lib'
 
-=item C<$allowed_naked_packages> These packages are allowed to have naked subs equal to specified numbers. (optional)
+=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers. (optional)
 
 example: {Package1 => 2, Package2 => 1, Package3 => 10}
 
-=item C<$ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
+=item * C<$ignored_packages> - a list of packages that will be ignored in our checks, supports arrayref. (optional)
 
 example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 
@@ -106,9 +104,9 @@ Ignores the packages in the C<$ignored_packages> parameter.
 
 =item * C<$path> - path or arrayref of directories to check (recursively)
 
-=item C<$allowed_naked_packages> These packages are allowed to have naked subs equal to specified numbers. (optional)
+=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers. (optional)
 
-=item C<$ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
+=item * C<$ignored_packages> - a list of packages that will be ignored in our checks, supports arrayref. (optional)
 
 =back
 
@@ -137,7 +135,7 @@ Check POD syntax for all the modules that exists under a given directory.
 
 =item * C<$path> - path or arrayref of directories to check (recursively)
 
-=item C<$ignored_packages> - A list of packages that will be ignored in the checks, supports arrayref. (optional)
+=item * C<$ignored_packages> - a list of packages that will be ignored in the checks, supports arrayref. (optional)
 
 =back
 
@@ -151,7 +149,7 @@ sub check_pod_syntax {
     my @ignored_packages_full_path = ();
     for (@$ignored_packages) {
         my $file_path = module_path($_);
-        push(@ignored_packages_full_path, $file_path) if defined $file_path;
+        push @ignored_packages_full_path, $file_path  if defined $file_path;
     }
 
     my @files_path = File::Find::Rule->file()
@@ -160,17 +158,15 @@ sub check_pod_syntax {
 
     for my $file_path (@files_path) {
         chomp $file_path;
-        next if @ignored_packages_full_path && grep (/$file_path/, @ignored_packages_full_path);
+        next if any { /\Q$file_path/ } @ignored_packages_full_path;
 
         my $check_result = podchecker($file_path);
         if ($check_result == POD_SYNTAX_IS_OK) {
-            $Test_Builder->ok(TRUE, sprintf("Pod structure is OK in the file %s.", $file_path));
-        }
-        elsif ($check_result == FILE_HAS_NO_POD) {
+            $Test_Builder->ok(1, sprintf("Pod structure is OK in the file %s.", $file_path));
+        } elsif ($check_result == FILE_HAS_NO_POD) {
             $Test_Builder->todo_skip(sprintf("There is no POD in the file %s.", $file_path));
-        }
-        else {
-            $Test_Builder->ok(FALSE, sprintf("There are %d errors in the POD structure in the %s.", $check_result, $file_path));
+        } else {
+            $Test_Builder->ok(0, sprintf("There are %d errors in the POD structure in the %s.", $check_result, $file_path));
         }
     }
 }
@@ -181,9 +177,9 @@ Checks passed allowed_naked_packages against existing package files.
 
 =over 4
 
-=item C<$allowed_naked_packages> These packages are allowed to have naked subs equal to specified numbers. (optional)
+=item * C<$allowed_naked_packages> - these packages are allowed to have naked subs equal to specified numbers. (optional)
 
-=item C<$ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
+=item * C<$ignored_packages> - a list of packages that will be ignored in our checks, supports arrayref. (optional)
 
 =back
 
@@ -214,19 +210,19 @@ sub check_allowed_naked_packages {
         }
 
         if (!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
-            $Test_Builder->ok(FALSE, sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file));
+            $Test_Builder->ok(0, sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file));
 Your last changes decreased the number of naked subs in the %s package.
 Change the %s => %s in the %s file please.
 MESSAGE
             next;
         }
         elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
-            $Test_Builder->ok(FALSE, sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
+            $Test_Builder->ok(0, sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
             next;
         }
 
         if ($fully_covered) {
-            $Test_Builder->ok(FALSE, sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
+            $Test_Builder->ok(0, sprintf('%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
                 $package, $caller_test_file));
         }
     }
