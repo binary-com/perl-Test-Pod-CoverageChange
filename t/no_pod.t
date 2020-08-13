@@ -26,7 +26,7 @@ subtest 'Module with no pod, unexpected' => sub {
     done_testing;
 };
 
-subtest 'We can expect module naked sub' => sub {
+subtest 'Can expect module naked sub' => sub {
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 3});
 };
 

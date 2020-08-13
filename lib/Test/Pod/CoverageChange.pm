@@ -49,7 +49,7 @@ Possible results
 
 =back
 
-Ignores to check every package that we pass as C<$ignored_package>
+Ignores to check every package that passed as C<$ignored_package>
 
 =cut
 
@@ -223,7 +223,7 @@ sub check_allowed_naked_packages {
         my $naked_subs_count        = scalar $pc->naked // scalar $pc->_get_syms($package);
 
         if (!$fully_covered) {
-            $Test_Builder->todo_skip(sprintf("We have %.2f%% POD coverage for the module '%s'.", $coverage_percentage, $package));
+            $Test_Builder->todo_skip(sprintf("You have %.2f%% POD coverage for the module '%s'.", $coverage_percentage, $package));
         }
 
         if (!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
