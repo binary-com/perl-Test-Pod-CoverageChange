@@ -17,17 +17,17 @@ Test::Pod::CoverageChange - Test Perl files for POD coverage and syntax changes
 
 =head1 SYNOPSIS
 
-    use Test::Pod::CoverageChange qw(pod_coverage_syntax_ok);
+ use Test::Pod::CoverageChange qw(pod_coverage_syntax_ok);
 
-    Test::Pod::CoverageChange::pod_coverage_syntax_ok('lib', {
-        Module::With::3::expected::naked::subs              => 3,
-        AnotherModule::With::10::expected::naked::subs      => 10,
-        YetAnotherModule::With::1::expected::naked::subs    => 1,
-        YetAnotherModule::With::5::expected::naked::subs    => 5,
-    }, [
-        We::Ignore::ThisModule,
-        We::Also::Ignore::This::Module
-    ]);
+ Test::Pod::CoverageChange::pod_coverage_syntax_ok('lib', {
+     Module::With::3::expected::naked::subs              => 3,
+     AnotherModule::With::10::expected::naked::subs      => 10,
+     YetAnotherModule::With::1::expected::naked::subs    => 1,
+     YetAnotherModule::With::5::expected::naked::subs    => 5,
+ }, [
+     We::Ignore::ThisModule,
+     We::Also::Ignore::This::Module
+ ]);
 
 =head1 DESCRIPTION
 
@@ -35,10 +35,19 @@ C<Test::Pod::CoverageChange> is a helper combining L<Test::Pod::Coverage> and
 L<Pod::Checker> to test for both POD coverage and syntax changes for a module
 distribution at once, via a single call to L</pod_coverage_syntax_ok>.
 
-C<passes> if the file have no POD syntax or coverage error.
-C<fails> if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
-C<fails> if a package allowed to have naked subs has 100% POD coverage.
-C<fails> if a file in a given path has POD syntax error or has no POD.
+Possible results
+
+=over 4
+
+=item - B<passes> if the file have no POD syntax or coverage error.
+
+=item - B<fails> if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
+
+=item - B<fails> if a package allowed to have naked subs has 100% POD coverage.
+
+=item - B<fails> if a file in a given path has POD syntax error or has no POD.
+
+=back
 
 Ignores to check every package that we pass as C<$ignored_package>
 
@@ -181,9 +190,17 @@ Checks passed allowed_naked_packages against existing package files.
 
 =back
 
-C<todo fail> if the numbers of existing naked subs are equal to passed value.
-C<fails> if the numbers of existing naked subs are more/less than the passed value.
-C<fails> if a package has 100% POD coverage and it passed as a L<$allowed_naked_package>.
+Possible results
+
+=over 4
+
+=item - B<todo fail> if the numbers of existing naked subs are equal to passed value.
+
+=item - B<fails> if the numbers of existing naked subs are more/less than the passed value.
+
+=item - B<fails> if a package has 100% POD coverage and it passed as a L<$allowed_naked_package>.
+
+=back
 
 =cut
 
