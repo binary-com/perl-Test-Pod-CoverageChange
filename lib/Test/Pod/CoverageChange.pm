@@ -186,8 +186,6 @@ Checks passed allowed_naked_packages against existing package files.
 
 =item C<$ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
 
-example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
-
 =back
 
 C<todo fail> if the numbers of existing naked subs are equal to passed value.
