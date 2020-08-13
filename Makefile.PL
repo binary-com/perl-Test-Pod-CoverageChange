@@ -7,7 +7,7 @@ use 5.006;
 use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "check perl modules against their pod coverage",
+  "ABSTRACT" => "Test Perl files for POD coverage and syntax changes",
   "AUTHOR" => "Binary Group Services Ltd <BINARY\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0

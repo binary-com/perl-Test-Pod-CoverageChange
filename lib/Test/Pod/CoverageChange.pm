@@ -1,8 +1,8 @@
+package Test::Pod::CoverageChange;
+# ABSTRACT: Test Perl files for POD coverage and syntax changes
+
 use strict;
 use warnings;
-
-package Test::Pod::CoverageChange;
-# ABSTRACT: check perl modules against their pod coverage
 
 our $VERSION = '0.001';
 # AUTHORITY
@@ -13,7 +13,7 @@ use utf8;
 
 =head1 NAME
 
-Pod coverage calculator test file.
+Test::Pod::CoverageChange - Test Perl files for POD coverage and syntax changes
 
 =head1 SYNOPSIS
 
@@ -31,19 +31,19 @@ Pod coverage calculator test file.
 
 =head1 DESCRIPTION
 
-It checks all files that placed under a given directory against their
-POD coverage to see if all existing subs have POD and also
-POD syntax to see if is there an POD syntax error or not?
+C<Test::Pod::CoverageChange> is a helper combining L<Test::Pod::Coverage> and
+L<Pod::Checker> to test for both POD coverage and syntax changes for a module
+distribution at once, via a single call to L</pod_coverage_syntax_ok>.
 
-Prints the percentage of POD coverage in B<TODO> test format for the packages that we allowed to have naked subs.
-Prints an error message if our latest changes increased/decreased numbers of naked sub for the packages that we allowed to have naked sub.
-Prints an error message if a naked allowed package has 100% POD coverage. (We should remove it from the C<%naked_packages> variable list.)
+C<Todo fails> POD coverage percentage for the packages that have allowed naked subs.
+C<fails> if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
+C<fails> if a package that allowed to have naked subs has 100% POD coverage.
+C<fails> if a file in a given path has POD syntax error or has no POD at all.
+C<passes> if the file have no POD syntax or coverage error.
+C<fails> if the file has no POD at all.
+
 Ignores to check every package that we pass as C<@ignored_package>
-Prints a proper message for the newly added packages.
 
-It will generate c<ok> if the file have no POD syntax or coverage error.
-If the file has no POD at all, it will generate a failing TODO test.
-If the file has any POD error it will generate a C<not ok> fail test and pointing to the number of errors in the POD structure.
 
 =cut
 
@@ -67,15 +67,21 @@ our @EXPORT_OK = qw(pod_coverage_syntax_ok);
 
 =head2 pod_coverage_syntax_ok
 
-Check all modules under a given directory against POD coverage and POD syntax
+Checks all modules under a given directory against POD coverage and POD syntax
 
 =over 4
 
 =item * C<$path> - path or arrayref of directories to check (recursively)
 
-=item * C<naked_packages> packages that are allowed to have naked subs, supports hashref.
+example: ['lib', 'other directory'] | 'lib'
 
-=item * C<ignored_packages> packages that we are going to ignore to check, supports arrayref
+=item C<$allowed_naked_packages> These packages are allowed to have naked subs equal to specified numbers. (optional)
+
+example: {Package1 => 2, Package2 => 1, Package3 => 10}
+
+=item C<ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
+
+example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 
 =back
 
@@ -96,22 +102,16 @@ sub pod_coverage_syntax_ok {
 =head2 check_pod_coverage
 
 Checks POD coverage for all the modules that exists under a given directory.
-Passes the $allowed_naked_packages to the L<Test::Pod::CoverageChange::check_allowed_naked_packages>
-Ignores the packages in the C<$ignored_packages> parameter
+Passes the $allowed_naked_packages to the L<Test::Pod::CoverageChange::check_allowed_naked_packages>.
+Ignores the packages in the C<$ignored_packages> parameter.
 
 =over 4
 
-=item C<path> - path to check recursively, supports string or arrayref
+=item * C<$path> - path or arrayref of directories to check (recursively)
 
-example: ['lib', 'other directory'] | 'lib'
+=item C<$allowed_naked_packages> These packages are allowed to have naked subs equal to specified numbers. (optional)
 
-=item C<allowed_naked_packages> These packages are allowed to have naked subs equal to specified numbers.
-
-example: {Package1 => 2, Package2 => 1, Package3 => 10}
-
-=item C<ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
-
-example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
+=item C<$ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
 
 =back
 
@@ -140,11 +140,7 @@ Check POD syntax for all the modules that exists under a given directory.
 
 =item * C<$path> - path or arrayref of directories to check (recursively)
 
-example: ['lib', 'other directory'] | 'lib'
-
-=item C<ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
-
-example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
+=item C<$ignored_packages> - A list of packages that will be ignored in the checks, supports arrayref. (optional)
 
 =back
 
@@ -184,23 +180,21 @@ sub check_pod_syntax {
 
 =head2 check_allowed_naked_packages
 
-Checks passed allowed_naked_packages against existing package files and prints
+Checks passed allowed_naked_packages against existing package files.
 
 =over 4
 
-=item C<path> - path to check recursively, supports string or arrayref
+=item C<$allowed_naked_packages> These packages are allowed to have naked subs equal to specified numbers. (optional)
 
-example: ['lib', 'other directory'] | 'lib'
-
-=item C<ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
+=item C<$ignored_packages> - A list of packages that will be ignored in our checks, supports arrayref. (optional)
 
 example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 
 =back
 
-Prints C<todo fail> message if the numbers of existing naked subs are equal to passed value.
-Prints a normal C<fail> message if the numbers of existing naked subs are more/less than the passed value.
-Prints a normal C<fail> message if a package has 100% POD coverage and it passed as a naked_package.
+C<todo fail> if the numbers of existing naked subs are equal to passed value.
+C<fails> if the numbers of existing naked subs are more/less than the passed value.
+C<fails> if a package has 100% POD coverage and it passed as a L<$allowed_naked_package>.
 
 =cut
 
