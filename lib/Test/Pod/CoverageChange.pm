@@ -39,7 +39,7 @@ Possible results
 
 =over 4
 
-=item * B<passes> if the file have no POD syntax or coverage error.
+=item * B<passes> if the file has no POD syntax or coverage error.
 
 =item * B<fails> if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
 
@@ -71,7 +71,7 @@ our @EXPORT_OK = qw(pod_coverage_syntax_ok);
 
 =head2 pod_coverage_syntax_ok
 
-Checks all modules under a given directory against POD coverage and POD syntax
+Checks all the modules under a given directory against POD coverage and POD syntax
 
 =over 4
 
