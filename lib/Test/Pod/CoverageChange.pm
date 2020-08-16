@@ -164,7 +164,6 @@ sub check_pod_syntax {
     my @files_path = File::Find::Rule->file()->name('*.p[m|l]')->in(@$path);
 
     for my $file_path (@files_path) {
-        chomp $file_path;
         next if any { /\Q$file_path/ } @ignored_packages_full_path;
 
         my $check_result = podchecker($file_path);
