@@ -194,11 +194,11 @@ Possible results
 
 =over 4
 
-=item - B<todo fail> if the numbers of existing naked subs are equal to passed value.
+=item * B<todo fail> if the numbers of existing naked subs are equal to passed value.
 
-=item - B<fails> if the numbers of existing naked subs are more/less than the passed value.
+=item * B<fails> if the numbers of existing naked subs are more/less than the passed value.
 
-=item - B<fails> if a package has 100% POD coverage and it passed as a L<$allowed_naked_package>.
+=item * B<fails> if a package has 100% POD coverage and it passed as a L<$allowed_naked_package>.
 
 =back
 
