@@ -1,2 +1,2 @@
 test:
-	dzil  test && dzil xtest
+	dzil  test
