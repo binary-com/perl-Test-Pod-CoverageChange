@@ -39,13 +39,13 @@ Possible results
 
 =over 4
 
-=item - B<passes> if the file have no POD syntax or coverage error.
+=item * B<passes> if the file have no POD syntax or coverage error.
 
-=item - B<fails> if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
+=item * B<fails> if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
 
-=item - B<fails> if a package allowed to have naked subs has 100% POD coverage.
+=item * B<fails> if a package allowed to have naked subs has 100% POD coverage.
 
-=item - B<fails> if a file in a given path has POD syntax error or has no POD.
+=item * B<fails> if a file in a given path has POD syntax error or has no POD.
 
 =back
 
