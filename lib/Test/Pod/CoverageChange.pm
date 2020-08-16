@@ -212,7 +212,7 @@ sub check_allowed_naked_packages {
 
     # Check for the currently naked packages POD.
     foreach my $package (sort keys %$allowed_naked_packages) {
-        next if $ignored_packages && (grep (/^$package$/, @$ignored_packages));
+        next if any { /^\Q$package\E$/ } @$ignored_packages;
 
         my $pc = Pod::Coverage->new(
             package => $package,
