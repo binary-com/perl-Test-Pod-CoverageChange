@@ -49,7 +49,7 @@ Possible results
 
 =back
 
-Ignores to check every package that passed as C<$ignored_package>
+Ignores every package named from C<$ignored_package>.
 
 =cut
 
