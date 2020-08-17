@@ -25,7 +25,6 @@ my %WriteMakefileArgs = (
     "Pod::Coverage" => 0,
     "Test::More" => "0.98",
     "Test::Pod::Coverage" => 0,
-    "Dist::Zilla::PluginBundle::Author::DERIV" => "0.001",
     "constant" => 0,
     "strict" => 0,
     "utf8" => 0,
@@ -50,7 +49,6 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-    "Dist::Zilla::PluginBundle::Author::DERIV" => "0.001",
   "Dir::Self" => 0,
   "Exporter" => 0,
   "ExtUtils::MakeMaker" => 0,
