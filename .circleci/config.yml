@@ -20,7 +20,6 @@ jobs:
       - run:
           name: Run test
           command: |
-            export PERL5LIB=$(pwd)/deps/lib/perl5:$(pwd)/deps/lib/perl5/$(perl -MConfig -le'print $Config{archname}'):$PERL5LIB
             dzil test
 workflows:
   version: 2
