@@ -37,7 +37,6 @@ my %WriteMakefileArgs = (
     "IO::Handle" => 0,
     "IPC::Open3" => 0,
     "Test::Builder::Tester" => 0,
-    "Test::CheckDeps" => "0.010",
     "Test::More" => "0.98",
     "lib" => 0
   },
@@ -61,7 +60,6 @@ my %FallbackPrereqs = (
   "Pod::Checker" => 0,
   "Pod::Coverage" => 0,
   "Test::Builder::Tester" => 0,
-  "Test::CheckDeps" => "0.010",
   "Test::More" => "0.98",
   "Test::Pod::Coverage" => 0,
   "constant" => 0,
