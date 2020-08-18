@@ -11,6 +11,8 @@ on 'test' => sub {
     requires "IPC::Open3";
     requires "Test::More", ">= 0.98";
     requires "Dir::Self";
+    requires 'Test::CheckDeps';
+    requires 'Test::NoTabs';
 };
 
 on 'develop' => sub {
