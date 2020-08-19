@@ -105,7 +105,7 @@ sub pod_coverage_syntax_ok {
 
 =head2 check_pod_coverage
 
-Checks POD coverage for all the modules that exists under a given directory.
+Checks POD coverage for all the modules that exist under the given directory.
 Passes the C<$allowed_naked_packages> to L<Test::Pod::CoverageChange/check_allowed_naked_packages>.
 Ignores the packages in the C<$ignored_packages> parameter.
 
