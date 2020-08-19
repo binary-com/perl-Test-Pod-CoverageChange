@@ -138,7 +138,7 @@ sub check_pod_coverage {
 
 =head2 check_pod_syntax
 
-Check POD syntax for all the modules that exists under a given directory.
+Check POD syntax for all the modules that exist under the given directory.
 
 =over 4
 
