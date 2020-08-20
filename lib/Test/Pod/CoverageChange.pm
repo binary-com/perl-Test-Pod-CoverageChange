@@ -101,6 +101,8 @@ sub pod_coverage_syntax_ok {
 
     _check_pod_coverage($path, $allowed_naked_packages, $ignored_packages);
     _check_pod_syntax($path, $ignored_packages);
+
+    return;
 }
 
 =head2 _check_pod_coverage
@@ -134,6 +136,8 @@ sub _check_pod_coverage {
         next if any { $_ eq $package } @ignored_packages;
         pod_coverage_ok($package, {private => []});
     }
+
+    return;
 }
 
 =head2 _check_pod_syntax
@@ -175,6 +179,8 @@ sub _check_pod_syntax {
             $Test_Builder->ok(0, sprintf("There are %d errors in the POD structure in the %s.", $check_result, $file_path));
         }
     }
+
+    return;
 }
 
 =head2 _check_allowed_naked_packages
@@ -244,6 +250,8 @@ MESSAGE
                     $package, $caller_test_file
                 ));
         }
+
+        return;
     }
 }
 

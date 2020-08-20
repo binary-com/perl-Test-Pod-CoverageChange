@@ -19,7 +19,7 @@ subtest 'Module with no pod, unexpected' => sub {
     test_out("not ok 1 - Pod coverage on $test_module");
     test_out("not ok 2 # TODO & SKIP There is no POD in the file $test_module_path.");
     test_diag("  Failed test 'Pod coverage on $test_module'");
-    test_diag("  at $main_module_path line 135.");
+    test_diag("  at $main_module_path line 137.");
     test_diag("$test_module: couldn't find pod");
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path);
     test_test("Handles files with a pod error");
