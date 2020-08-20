@@ -19,7 +19,7 @@ Test::Pod::CoverageChange - Test Perl files for POD coverage and syntax changes
 
  use Test::Pod::CoverageChange qw(pod_coverage_syntax_ok);
 
- Test::Pod::CoverageChange::pod_coverage_syntax_ok('lib', {
+ pod_coverage_syntax_ok('lib', {
      MyModule::Bar => 3,  ## expected to have 3 naked subs
      MyModule::Foo => 10, ## expected to have 10 naked subs
      MyModule::Baz => 1,  ## expected to have 1 naked subs
@@ -99,14 +99,14 @@ sub pod_coverage_syntax_ok {
     $path             = [$path]             unless ref $path eq 'ARRAY';
     $ignored_packages = [$ignored_packages] unless ref $ignored_packages eq 'ARRAY';
 
-    check_pod_coverage($path, $allowed_naked_packages, $ignored_packages);
-    check_pod_syntax($path, $ignored_packages);
+    _check_pod_coverage($path, $allowed_naked_packages, $ignored_packages);
+    _check_pod_syntax($path, $ignored_packages);
 }
 
-=head2 check_pod_coverage
+=head2 _check_pod_coverage
 
 Checks POD coverage for all the modules that exist under the given directory.
-Passes the C<$allowed_naked_packages> to L<Test::Pod::CoverageChange/check_allowed_naked_packages>.
+Passes the C<$allowed_naked_packages> to L<Test::Pod::CoverageChange/_check_allowed_naked_packages>.
 Ignores the packages in the C<$ignored_packages> parameter.
 
 =over 4
@@ -121,12 +121,12 @@ Ignores the packages in the C<$ignored_packages> parameter.
 
 =cut
 
-sub check_pod_coverage {
+sub _check_pod_coverage {
     my $path                   = shift;
     my $allowed_naked_packages = shift;
     my $ignored_packages       = shift;
 
-    check_allowed_naked_packages($allowed_naked_packages, $ignored_packages) if keys %$allowed_naked_packages;
+    _check_allowed_naked_packages($allowed_naked_packages, $ignored_packages) if keys %$allowed_naked_packages;
 
     # Check for newly added packages PODs
     my @ignored_packages = (keys %$allowed_naked_packages, @$ignored_packages);
@@ -136,7 +136,7 @@ sub check_pod_coverage {
     }
 }
 
-=head2 check_pod_syntax
+=head2 _check_pod_syntax
 
 Check POD syntax for all the modules that exist under the given directory.
 
@@ -150,7 +150,7 @@ Check POD syntax for all the modules that exist under the given directory.
 
 =cut
 
-sub check_pod_syntax {
+sub _check_pod_syntax {
     my $path             = shift;
     my $ignored_packages = shift;
     my $Test_Builder     = Test::More->builder;
@@ -177,7 +177,7 @@ sub check_pod_syntax {
     }
 }
 
-=head2 check_allowed_naked_packages
+=head2 _check_allowed_naked_packages
 
 Checks passed allowed_naked_packages against existing package files.
 
@@ -203,7 +203,7 @@ Possible results
 
 =cut
 
-sub check_allowed_naked_packages {
+sub _check_allowed_naked_packages {
     my $allowed_naked_packages = shift;
     my $ignored_packages       = shift;
     my $caller_test_file       = (caller(2))[1];

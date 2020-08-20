@@ -10,7 +10,7 @@ version 0.001
 
     use Test::Pod::CoverageChange qw(pod_coverage_syntax_ok);
 
-    Test::Pod::CoverageChange::pod_coverage_syntax_ok('lib', {
+    pod_coverage_syntax_ok('lib', {
         MyModule::Bar => 3,  ## expected to have 3 naked subs
         MyModule::Foo => 10, ## expected to have 10 naked subs
         MyModule::Baz => 1,  ## expected to have 1 naked subs
