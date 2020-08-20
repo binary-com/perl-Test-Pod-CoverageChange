@@ -41,7 +41,7 @@ Possible results
 
 =item * B<passes> if the file has no POD syntax or coverage error.
 
-=item * B<fails> if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
+=item * B<fails> if latest changes increased/decreased numbers of naked subs for the packages that have allowed naked subs.
 
 =item * B<fails> if a package allowed to have naked subs has 100% POD coverage.
 
@@ -49,7 +49,7 @@ Possible results
 
 =back
 
-Ignores every package named from C<$ignored_package>.
+Ignores packages that passed as ignored package in the c<$ignored_package> argument into the pod_coverage_syntax_ok sub.
 
 =cut
 
