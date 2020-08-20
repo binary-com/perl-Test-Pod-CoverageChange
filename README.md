@@ -11,10 +11,10 @@ version 0.001
     use Test::Pod::CoverageChange qw(pod_coverage_syntax_ok);
 
     Test::Pod::CoverageChange::pod_coverage_syntax_ok('lib', {
-        Module::With::3::expected::naked::subs              => 3,
-        AnotherModule::With::10::expected::naked::subs      => 10,
-        YetAnotherModule::With::1::expected::naked::subs    => 1,
-        YetAnotherModule::With::5::expected::naked::subs    => 5,
+        MyModule::Bar => 3,  ## expected to have 3 naked subs
+        MyModule::Foo => 10, ## expected to have 10 naked subs
+        MyModule::Baz => 1,  ## expected to have 1 naked subs
+        MyModule::Qux => 5,  ## expected to have 5 naked subs
     }, [
         We::Ignore::ThisModule,
         We::Also::Ignore::This::Module
