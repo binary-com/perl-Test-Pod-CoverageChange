@@ -17,20 +17,17 @@ subtest 'Module has a pod syntax error' => sub {
 
     test_out(
         "not ok 1 - Pod coverage on $test_module",
-        "not ok 2 - There are 1 errors in the POD structure in the t/PodSyntaxError.pm."
+        "not ok 2 - There are 1 errors in the POD structure in the $test_module_path."
     );
-
     test_diag(
-        "  Failed test 'Pod coverage on t::PodSyntaxError'",
+        "  Failed test 'Pod coverage on $test_module'",
         "  at $main_module_path line 137.",
         "Coverage for $test_module is 33.3%, with 2 naked subroutines:"
     );
-
     test_err(
         "# 	baz",
         "# 	foo"
     );
-
     test_diag(
         "  Failed test 'There are 1 errors in the POD structure in the $test_module_path.'",
         "  at $main_module_path line 103."
