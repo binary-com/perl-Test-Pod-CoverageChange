@@ -92,7 +92,7 @@ example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 =cut
 
 sub pod_coverage_syntax_ok {
-    my $path                   = shift;
+    my $path                   = shift // 'lib';
     my $allowed_naked_packages = shift // {};
     my $ignored_packages       = shift // [];
 
@@ -124,9 +124,9 @@ Ignores the packages in the C<$ignored_packages> parameter.
 =cut
 
 sub _check_pod_coverage {
-    my $path                   = shift;
-    my $allowed_naked_packages = shift;
-    my $ignored_packages       = shift;
+    my $path                   = shift // 'lib';
+    my $allowed_naked_packages = shift // {};
+    my $ignored_packages       = shift // [];
 
     _check_allowed_naked_packages($allowed_naked_packages, $ignored_packages) if keys %$allowed_naked_packages;
 
@@ -155,8 +155,9 @@ Check POD syntax for all the modules that exist under the given directory.
 =cut
 
 sub _check_pod_syntax {
-    my $path             = shift;
-    my $ignored_packages = shift;
+    my $path             = shift // 'lib';
+    my $ignored_packages = shift // [];
+
     my $Test_Builder     = Test::More->builder;
 
     my @ignored_packages_full_path = ();
@@ -210,10 +211,11 @@ Possible results
 =cut
 
 sub _check_allowed_naked_packages {
-    my $allowed_naked_packages = shift;
-    my $ignored_packages       = shift;
-    my $caller_test_file       = (caller(2))[1];
+    my $allowed_naked_packages = shift // {};
+    my $ignored_packages       = shift // [];
+
     my $Test_Builder           = Test::More->builder;
+    my $caller_test_file       = (caller(2))[1];
 
     # Check for the currently naked packages POD.
     foreach my $package (sort keys %$allowed_naked_packages) {
