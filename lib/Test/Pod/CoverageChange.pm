@@ -221,9 +221,7 @@ sub _check_allowed_naked_packages {
     foreach my $package (sort keys %$allowed_naked_packages) {
         next if any { /^\Q$package\E$/ } @$ignored_packages;
 
-        my $pc = Pod::Coverage->new(
-            package => $package,
-            private => []);
+        my $pc = Pod::Coverage->new(package => $package, private => []);
         my $fully_covered = defined $pc->coverage && $pc->coverage == 1;
         my $coverage_percentage     = defined $pc->coverage ? $pc->coverage * 100 : 0;
         my $max_expected_naked_subs = $allowed_naked_packages->{$package};
@@ -234,10 +232,8 @@ sub _check_allowed_naked_packages {
         }
 
         if (!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
-            $Test_Builder->ok(0, sprintf(<<'MESSAGE', $package, $package, $naked_subs_count, $caller_test_file));
-Your last changes decreased the number of naked subs in the %s package.
-Change the %s => %s in the %s file please.
-MESSAGE
+            $Test_Builder->ok(0, sprintf("Your last changes decreased the number of naked subs in the %s package.
+Change the %s => %s in the %s file please.", $package, $package, $naked_subs_count, $caller_test_file));
             next;
         } elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
             $Test_Builder->ok(0, sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
