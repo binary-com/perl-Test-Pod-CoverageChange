@@ -27,12 +27,13 @@ subtest 'Module with no pod, unexpected' => sub {
         "$test_module: couldn't find pod",
     );
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path);
-    test_test("Handles files with a pod error");
+    test_test("Handles files with no pod");
     done_testing;
 };
 
 subtest 'Can expect module naked sub' => sub {
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 3});
+    done_testing;
 };
 
 subtest 'Test will fail if we increased the number of naked subs' => sub {
@@ -46,7 +47,7 @@ subtest 'Test will fail if we increased the number of naked subs' => sub {
         "  at $main_module_path line 131."
     );
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 2});
-    test_test("Handles files with a pod error");
+    test_test("Handles files with no pod");
     done_testing;
 };
 
@@ -63,7 +64,7 @@ subtest 'this is another subtest' => sub {
         "  at $main_module_path line 131."
     );
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 4});
-    test_test("Handles files with a pod error");
+    test_test("Handles files with no pod");
     done_testing;
 };
 
