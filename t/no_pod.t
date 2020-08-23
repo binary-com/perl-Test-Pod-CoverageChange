@@ -55,12 +55,12 @@ subtest 'this is another subtest' => sub {
         "not ok 1 # TODO & SKIP You have 0.00% POD coverage for the module '$test_module'.",
         "not ok 2 - Your last changes decreased the number of naked subs in the $test_module package.",
         "# Change the $test_module => 3 in the $current_test_file_path file please.",
-        "not ok 3 # TODO & SKIP There is no POD in the file $test_module_path.",
+        "not ok 3 # TODO & SKIP There is no POD in the file $test_module_path."
     );
     test_diag(
         "  Failed test 'Your last changes decreased the number of naked subs in the $test_module package.",
         "Change the $test_module => 3 in the $current_test_file_path file please.'",
-        "  at $main_module_path line 131.",
+        "  at $main_module_path line 131."
     );
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 4});
     test_test("Handles files with a pod error");
