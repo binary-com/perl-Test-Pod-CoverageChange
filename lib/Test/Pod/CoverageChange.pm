@@ -244,7 +244,7 @@ Change the %s => %s in the %s file please.", $package, $package, $naked_subs_cou
             $Test_Builder->ok(
                 0,
                 sprintf(
-                    '%s modules has 100%% POD coverage. Please remove it from the %s file $naked_packages variable to fix this error.',
+                    '%s modules has 100%% POD coverage. Please remove it from the %s file $allowed_naked_packages variable to fix this error.',
                     $package, $caller_test_file
                 ));
         }
