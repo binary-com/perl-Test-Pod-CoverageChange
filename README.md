@@ -1,6 +1,6 @@
 # NAME
 
-Wraps Test::Pod::Coverage and Pod::Checker modules to support undocumented subs and statistics on changed coverage.
+Perl test POD coverage change
 
 # VERSION
 
@@ -21,6 +21,8 @@ version 0.001
     ]);
 
 # DESCRIPTION
+
+Wraps Test::Pod::Coverage and Pod::Checker modules to support undocumented subs and statistics on changed coverage.
 
 - **passes** if the file have no POD syntax or coverage error.
 - **fails** if latest changes increased/decreased numbers of naked sub for the packages that have allowed naked subs.
