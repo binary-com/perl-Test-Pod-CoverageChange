@@ -11,21 +11,14 @@ use Test::Pod::CoverageChange;
 use t::Nopod;
 
 # Initializing variables
-my $test_module      = "t::Nopod";
-my $test_module_path = 't/Nopod.pm';
+my $test_module            = "t::Nopod";
+my $test_module_path       = 't/Nopod.pm';
 my $current_test_file_path = 't/no_pod.t';
-my $main_module_path = module_path('Test::Pod::CoverageChange');
+my $main_module_path       = module_path('Test::Pod::CoverageChange');
 
 subtest 'Module with no pod, unexpected' => sub {
-    test_out(
-        "not ok 1 - Pod coverage on $test_module",
-        "not ok 2 # TODO & SKIP There is no POD in the file $test_module_path."
-    );
-    test_diag(
-        "  Failed test 'Pod coverage on $test_module'",
-        "  at $main_module_path line 137.",
-        "$test_module: couldn't find pod"
-    );
+    test_out("not ok 1 - Pod coverage on $test_module", "not ok 2 # TODO & SKIP There is no POD in the file $test_module_path.");
+    test_diag("  Failed test 'Pod coverage on $test_module'", "  at $main_module_path line 137.", "$test_module: couldn't find pod");
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path);
     test_test("Handles files with no pod");
     done_testing;
@@ -42,10 +35,8 @@ subtest 'Test will fail if we increased the number of naked subs' => sub {
         "not ok 2 - Your last changes increased the number of naked subs in the $test_module package.",
         "not ok 3 # TODO & SKIP There is no POD in the file $test_module_path."
     );
-    test_diag(
-        "  Failed test 'Your last changes increased the number of naked subs in the $test_module package.'",
-        "  at $main_module_path line 131."
-    );
+    test_diag("  Failed test 'Your last changes increased the number of naked subs in the $test_module package.'",
+        "  at $main_module_path line 131.");
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 2});
     test_test("Handles files with no pod");
     done_testing;

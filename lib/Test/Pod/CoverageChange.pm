@@ -158,7 +158,7 @@ sub _check_pod_syntax {
     my $path             = shift // 'lib';
     my $ignored_packages = shift // [];
 
-    my $Test_Builder     = Test::More->builder;
+    my $Test_Builder = Test::More->builder;
 
     my @ignored_packages_full_path = ();
     for (@$ignored_packages) {
@@ -214,15 +214,17 @@ sub _check_allowed_naked_packages {
     my $allowed_naked_packages = shift // {};
     my $ignored_packages       = shift // [];
 
-    my $Test_Builder           = Test::More->builder;
-    my $caller_test_file       = (caller(2))[1];
+    my $Test_Builder     = Test::More->builder;
+    my $caller_test_file = (caller(2))[1];
 
     # Check for the currently naked packages POD.
     foreach my $package (sort keys %$allowed_naked_packages) {
         next if any { /^\Q$package\E$/ } @$ignored_packages;
 
-        my $pc = Pod::Coverage->new(package => $package, private => []);
-        my $fully_covered = defined $pc->coverage && $pc->coverage == 1;
+        my $pc = Pod::Coverage->new(
+            package => $package,
+            private => []);
+        my $fully_covered           = defined $pc->coverage && $pc->coverage == 1;
         my $coverage_percentage     = defined $pc->coverage ? $pc->coverage * 100 : 0;
         my $max_expected_naked_subs = $allowed_naked_packages->{$package};
         my $naked_subs_count        = scalar $pc->naked // scalar $pc->_get_syms($package);
@@ -232,8 +234,12 @@ sub _check_allowed_naked_packages {
         }
 
         if (!$fully_covered && $naked_subs_count < $max_expected_naked_subs) {
-            $Test_Builder->ok(0, sprintf("Your last changes decreased the number of naked subs in the %s package.
-Change the %s => %s in the %s file please.", $package, $package, $naked_subs_count, $caller_test_file));
+            $Test_Builder->ok(
+                0,
+                sprintf(
+                    "Your last changes decreased the number of naked subs in the %s package.
+Change the %s => %s in the %s file please.", $package, $package, $naked_subs_count, $caller_test_file
+                ));
             next;
         } elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
             $Test_Builder->ok(0, sprintf('Your last changes increased the number of naked subs in the %s package.', $package));

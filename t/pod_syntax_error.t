@@ -15,23 +15,14 @@ subtest 'Module has a pod syntax error' => sub {
     my $test_module_path = 't/PodSyntaxError.pm';
     my $main_module_path = module_path('Test::Pod::CoverageChange');
 
-    test_out(
-        "not ok 1 - Pod coverage on $test_module",
-        "not ok 2 - There are 1 errors in the POD structure in the $test_module_path."
-    );
+    test_out("not ok 1 - Pod coverage on $test_module", "not ok 2 - There are 1 errors in the POD structure in the $test_module_path.");
     test_diag(
         "  Failed test 'Pod coverage on $test_module'",
         "  at $main_module_path line 137.",
         "Coverage for $test_module is 33.3%, with 2 naked subroutines:"
     );
-    test_err(
-        "# 	baz",
-        "# 	foo"
-    );
-    test_diag(
-        "  Failed test 'There are 1 errors in the POD structure in the $test_module_path.'",
-        "  at $main_module_path line 103."
-    );
+    test_err("# 	baz", "# 	foo");
+    test_diag("  Failed test 'There are 1 errors in the POD structure in the $test_module_path.'", "  at $main_module_path line 103.");
     warn "\n*** PLEASE IGNORE THE NEXT WARNING AND ERROR MESSAGES THEY ARE PARTS OF TESTING PROCESS.";
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path);
     test_test("Handles files with no pod at all");
