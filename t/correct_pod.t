@@ -14,7 +14,7 @@ my $test_module_path       = 't/CorrectPod.pm';
 my $main_module_path       = module_path('Test::Pod::CoverageChange');
 my $current_test_file_path = 't/correct_pod.t';
 
-subtest 'Module has perfect pod' => sub {
+subtest 'Module with full pod coverage' => sub {
     test_out("ok 1 - Pod coverage on $test_module", "ok 2 - Pod structure is OK in the file $test_module_path.");
     Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path);
     test_test("Pods are completely correct.");

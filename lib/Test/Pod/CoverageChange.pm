@@ -102,7 +102,7 @@ sub pod_coverage_syntax_ok {
     _check_pod_coverage($path, $allowed_naked_packages, $ignored_packages);
     _check_pod_syntax($path, $ignored_packages);
 
-    return;
+    return undef;
 }
 
 =head2 _check_pod_coverage
@@ -137,7 +137,7 @@ sub _check_pod_coverage {
         pod_coverage_ok($package, {private => []});
     }
 
-    return;
+    return undef;
 }
 
 =head2 _check_pod_syntax
@@ -181,7 +181,7 @@ sub _check_pod_syntax {
         }
     }
 
-    return;
+    return undef;
 }
 
 =head2 _check_allowed_naked_packages
@@ -254,9 +254,9 @@ Change the %s => %s in the %s file please.", $package, $package, $naked_subs_cou
                     $package, $caller_test_file
                 ));
         }
-
-        return;
     }
+
+    return undef;
 }
 
 1;
