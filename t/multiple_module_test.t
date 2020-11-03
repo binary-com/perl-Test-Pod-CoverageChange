@@ -38,8 +38,7 @@ subtest 'every modules will check in the process' => sub {
 };
 
 subtest 'modules order does not matter' => sub {
-    my $tests_modules_paths = ['t/PartiallyCoveredPod.pm', 't/CorrectPod.pm', 't/Nopod.pm'];
-    Test::Pod::CoverageChange::pod_coverage_syntax_ok($tests_modules_paths, {'t::Nopod' => 3, 't::PartiallyCoveredPod' => 2});
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok([$test_module_path->@[2,1,3] ], {'t::Nopod' => 3, 't::PartiallyCoveredPod' => 2});
     done_testing;
 };
 
