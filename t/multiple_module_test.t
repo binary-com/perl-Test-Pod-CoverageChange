@@ -14,9 +14,7 @@ use t::PodSyntaxError;
 use t::PartiallyCoveredPod;
 
 # Initializing variables
-my $test_module            = "t::Nopod";
 my $test_module_path       = ['t/CorrectPod.pm', 't/Nopod.pm', 't/PartiallyCoveredPod.pm'];
-my $current_test_file_path = 't/multiple_module_test.t';
 my $main_module_path       = module_path('Test::Pod::CoverageChange');
 
 subtest 'every modules will check in the process' => sub {
