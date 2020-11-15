@@ -30,7 +30,7 @@ subtest 'Module with full pod coverage should not be in the $allowed_naked_packa
     );
     test_err(
         "#   Failed test '$test_module modules has 100% POD coverage. Please remove it from the $current_test_file_path file \$allowed_naked_packages variable to fix this error.'",
-        "#   at $main_module_path line 136."
+        "#   at $main_module_path line 143."
     );
     Test::Pod::CoverageChange::pod_coverage_syntax_ok(path => $test_module_path, allowed_naked_packages => $allowed_naked_packages);
     test_test("Pods are completely correct.");

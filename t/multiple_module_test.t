@@ -29,7 +29,7 @@ subtest 'every modules will check in the process' => sub {
     );
     test_diag(
         "  Failed test 'Your last changes increased the number of naked subs in the t::PartiallyCoveredPod package.'",
-        "  at $main_module_path line 136."
+        "  at $main_module_path line 143."
     );
 
     Test::Pod::CoverageChange::pod_coverage_syntax_ok(path => $test_module_path,

@@ -27,6 +27,9 @@ Test::Pod::CoverageChange - Test Perl files for POD coverage and syntax changes
  }, [
      We::Ignore::ThisModule,
      We::Also::Ignore::This::Module
+ ],[
+     'a_sub_name_to_ignore'
+     qr/regexes are also acceptable/
  ]);
 
 =head1 DESCRIPTION
@@ -86,6 +89,10 @@ example: {Package1 => 2, Package2 => 1, Package3 => 10}
 =item * C<$ignored_packages> - arrayref of packages that will be ignored in the checks (optional)
 
 example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
+
+=item * C<$ignored_subs> - arrayref of subnames or regexes that will be ignored in the checks (optional)
+
+example: ['a_sub_name', qr/a regex/]
 
 =back
 
