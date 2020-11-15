@@ -18,6 +18,9 @@ version 0.001
     }, [
         We::Ignore::ThisModule,
         We::Also::Ignore::This::Module
+    ],[
+        'a_sub_name_to_ignore'
+        qr/regexes are also acceptable/
     ]);
 
 # DESCRIPTION
