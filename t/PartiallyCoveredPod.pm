@@ -12,6 +12,7 @@ It's a pod for the foo sub
 sub foo { }
 
 sub bar { }
+
 sub baz { }
 
 1;

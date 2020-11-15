@@ -18,14 +18,14 @@ my $main_module_path       = module_path('Test::Pod::CoverageChange');
 
 subtest 'Module with no pod, unexpected' => sub {
     test_out("not ok 1 - Pod coverage on $test_module", "not ok 2 # TODO & SKIP There is no POD in the file $test_module_path.");
-    test_diag("  Failed test 'Pod coverage on $test_module'", "  at $main_module_path line 137.", "$test_module: couldn't find pod");
-    Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path);
+    test_diag("  Failed test 'Pod coverage on $test_module'", "  at $main_module_path line 142.", "$test_module: couldn't find pod");
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok(path => $test_module_path);
     test_test("Handles files with no pod");
     done_testing;
 };
 
 subtest 'Can expect module naked sub' => sub {
-    Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 3});
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok(path => $test_module_path, allowed_naked_packages => {'t::Nopod' => 3});
     done_testing;
 };
 
@@ -36,8 +36,9 @@ subtest 'Test will fail if we increased the number of naked subs' => sub {
         "not ok 3 # TODO & SKIP There is no POD in the file $test_module_path."
     );
     test_diag("  Failed test 'Your last changes increased the number of naked subs in the $test_module package.'",
-        "  at $main_module_path line 131.");
-    Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 2});
+        "  at $main_module_path line 136.");
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok(path => $test_module_path,
+        allowed_naked_packages => {'t::Nopod' => 2});
     test_test("Handles files with no pod");
     done_testing;
 };
@@ -52,15 +53,16 @@ subtest 'this is another subtest' => sub {
     test_diag(
         "  Failed test 'Your last changes decreased the number of naked subs in the $test_module package.",
         "Change the $test_module => 3 in the $current_test_file_path file please.'",
-        "  at $main_module_path line 131."
+        "  at $main_module_path line 136."
     );
-    Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {'t::Nopod' => 4});
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok(path => $test_module_path,
+        allowed_naked_packages => {'t::Nopod' => 4});
     test_test("Handles files with no pod");
     done_testing;
 };
 
 subtest 'Ignore some tests' => sub {
-    Test::Pod::CoverageChange::pod_coverage_syntax_ok($test_module_path, {}, ['t::Nopod']);
+    Test::Pod::CoverageChange::pod_coverage_syntax_ok(path => $test_module_path, ignored_packages => ['t::Nopod']);
     pass('Even bad Pods can be ignored successfully.');
 };
 

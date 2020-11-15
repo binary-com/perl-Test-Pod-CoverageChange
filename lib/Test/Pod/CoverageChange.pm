@@ -92,14 +92,18 @@ example: ['MyPackage1', 'MyPackage2', 'MyPackage3']
 =cut
 
 sub pod_coverage_syntax_ok {
-    my $path                   = shift // 'lib';
-    my $allowed_naked_packages = shift // {};
-    my $ignored_packages       = shift // [];
+    my %args = @_;
+    my %default_values = (path => 'lib', allowed_naked_packages => {}, ignored_packages => [], ignored_subs => []);
+
+    %args = (%default_values, %args);
+
+    my $path                   = $args{path} // 'lib';
+    my $ignored_packages       = $args{ignored_packages} // [];
 
     $path             = [$path]             unless ref $path eq 'ARRAY';
     $ignored_packages = [$ignored_packages] unless ref $ignored_packages eq 'ARRAY';
 
-    _check_pod_coverage($path, $allowed_naked_packages, $ignored_packages);
+    _check_pod_coverage($path, $args{allowed_naked_packages}, $ignored_packages, $args{ignored_subs}, $args{ignored_subs});
     _check_pod_syntax($path, $ignored_packages);
 
     return undef;
@@ -127,6 +131,7 @@ sub _check_pod_coverage {
     my $path                   = shift // 'lib';
     my $allowed_naked_packages = shift // {};
     my $ignored_packages       = shift // [];
+    my $ignored_subs           = shift // [];
 
     _check_allowed_naked_packages($allowed_naked_packages, $ignored_packages) if keys %$allowed_naked_packages;
 
@@ -134,7 +139,7 @@ sub _check_pod_coverage {
     my @ignored_packages = (keys %$allowed_naked_packages, @$ignored_packages);
     foreach my $package (Test::Pod::Coverage::all_modules(@$path)) {
         next if any { $_ eq $package } @ignored_packages;
-        pod_coverage_ok($package, {private => []});
+        pod_coverage_ok($package, {private => [], also_private => $ignored_subs});
     }
 
     return undef;
