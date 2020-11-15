@@ -103,7 +103,7 @@ sub pod_coverage_syntax_ok {
     $path             = [$path]             unless ref $path eq 'ARRAY';
     $ignored_packages = [$ignored_packages] unless ref $ignored_packages eq 'ARRAY';
 
-    _check_pod_coverage($path, $args{allowed_naked_packages}, $ignored_packages, $args{ignored_subs}, $args{ignored_subs});
+    _check_pod_coverage($path, $args{allowed_naked_packages}, $ignored_packages, $args{ignored_subs});
     _check_pod_syntax($path, $ignored_packages);
 
     return undef;
