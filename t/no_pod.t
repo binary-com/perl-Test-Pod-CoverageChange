@@ -32,10 +32,10 @@ subtest 'Can expect module naked sub' => sub {
 subtest 'Test will fail if we increased the number of naked subs' => sub {
     test_out(
         "not ok 1 # TODO & SKIP You have 0.00% POD coverage for the module '$test_module'.",
-        "not ok 2 - Your last changes increased the number of naked subs in the $test_module package.",
+        "not ok 2 - Your last changes increased the number of naked subs in the $test_module package from 2 to 3. Please add sube for your new subs.",
         "not ok 3 # TODO & SKIP There is no POD in the file $test_module_path."
     );
-    test_diag("  Failed test 'Your last changes increased the number of naked subs in the $test_module package.'",
+    test_diag("  Failed test 'Your last changes increased the number of naked subs in the $test_module package from 2 to 3. Please add sube for your new subs.'",
         "  at $main_module_path line 143.");
     Test::Pod::CoverageChange::pod_coverage_syntax_ok(path => $test_module_path,
         allowed_naked_packages => {'t::Nopod' => 2});

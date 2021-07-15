@@ -254,7 +254,8 @@ Change the %s => %s in the %s file please.", $package, $package, $naked_subs_cou
                 ));
             next;
         } elsif (!$fully_covered && $naked_subs_count > $max_expected_naked_subs) {
-            $Test_Builder->ok(0, sprintf('Your last changes increased the number of naked subs in the %s package.', $package));
+            $Test_Builder->ok(0, sprintf("Your last changes increased the number of naked subs in the %s package from %s to %s. Please add sube for your new subs.",
+                $package, $max_expected_naked_subs, $naked_subs_count));
             next;
         }
 

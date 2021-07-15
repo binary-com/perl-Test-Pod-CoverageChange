@@ -21,14 +21,14 @@ subtest 'every modules will check in the process' => sub {
     test_out(
         "not ok 1 # TODO & SKIP You have 0.00% POD coverage for the module 't::Nopod'.",
         "not ok 2 # TODO & SKIP You have 33.33% POD coverage for the module 't::PartiallyCoveredPod'.",
-        "not ok 3 - Your last changes increased the number of naked subs in the t::PartiallyCoveredPod package.",
+        "not ok 3 - Your last changes increased the number of naked subs in the t::PartiallyCoveredPod package from 1 to 2. Please add sube for your new subs.",
         "ok 4 - Pod coverage on t::CorrectPod",
         "ok 5 - Pod structure is OK in the file t/CorrectPod.pm.",
         "not ok 6 # TODO & SKIP There is no POD in the file t/Nopod.pm.",
         "ok 7 - Pod structure is OK in the file t/PartiallyCoveredPod.pm.",
     );
     test_diag(
-        "  Failed test 'Your last changes increased the number of naked subs in the t::PartiallyCoveredPod package.'",
+        "  Failed test 'Your last changes increased the number of naked subs in the t::PartiallyCoveredPod package from 1 to 2. Please add sube for your new subs.'",
         "  at $main_module_path line 143."
     );
 
