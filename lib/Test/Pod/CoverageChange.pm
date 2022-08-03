@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 our $VERSION = '0.001';
-# AUTHORITY
+our $AUTHORITY = 'cpan:DERIV'; # AUTHORITY
 
 use utf8;
 
