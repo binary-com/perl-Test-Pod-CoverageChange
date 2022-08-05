@@ -63,7 +63,7 @@ use File::Find::Rule;
 use Test::Pod::Coverage;
 use Module::Path qw(module_path);
 use List::Util qw(any);
-
+use Path::Tiny;
 use constant {
     POD_SYNTAX_IS_OK => 0,
     FILE_HAS_NO_POD  => -1,
@@ -146,10 +146,23 @@ sub _check_pod_coverage {
     my @ignored_packages = (keys %$allowed_naked_packages, @$ignored_packages);
     foreach my $package (Test::Pod::Coverage::all_modules(@$path)) {
         next if any { $_ eq $package } @ignored_packages;
-        pod_coverage_ok($package, {private => [], also_private => $ignored_subs});
+        if(!pod_coverage_ok($package, {trustme => [qw(DOES META)], private => [], also_private => $ignored_subs})
+            && _package_is_object_pad($package)){
+            diag("Package $package is an Object::Pad class, Do you miss PODs of auto-generated methods?"
+            . 'it will generate method "new" and getter and setter of member fields like:
+            has $XXXX :reader; #=> will create a method "XXXX"
+            has $YYYY :writer: #=> will create a method "set_YYYY"');
+        }
+        
     }
 
     return undef;
+}
+
+sub _package_is_object_pad{
+    my $package = shift;
+    my $file = module_path($package);
+    return path($file)->slurp_utf8 =~ /Object::Pad/;
 }
 
 =head2 _check_pod_syntax
