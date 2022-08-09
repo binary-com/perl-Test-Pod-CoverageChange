@@ -4,7 +4,7 @@ package Test::Pod::CoverageChange;
 use strict;
 use warnings;
 
-our $VERSION = '0.002';
+our $VERSION = '0.001';
 # AUTHORITY
 
 use utf8;
