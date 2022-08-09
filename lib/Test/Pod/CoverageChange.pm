@@ -153,7 +153,7 @@ sub _check_pod_coverage {
             has $XXXX :reader; #=> will create a method "XXXX"
             has $YYYY :writer: #=> will create a method "set_YYYY"');
         }
-        
+
     }
 
     return undef;
