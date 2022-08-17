@@ -1,29 +1,46 @@
-version: 2
 jobs:
-  build:
+  test:
+    parameters:
+      perl-version:
+        description: The Perl version we want to test with
+        type: string
+        default: "5.34"
     docker:
-      - image: deriv/dzil:latest
-        entrypoint: /bin/bash
+      - image: perldocker/perl-tester:<< parameters.perl-version >>
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - cpanfile-{{ arch }}-{{ checksum "cpanfile" }}
       - run:
-          name: Install deps
-          command: |
-            cpanm -l deps --installdeps -n .
-      - save_cache:
-          key: cpanfile-{{ arch }}-{{ checksum "cpanfile" }}
-          paths:
-            - deps
+          command:
+            cpm install -g --no-test Dist::Zilla Dist::Zilla::App::Command::cover ExtUtils::MakeMaker
+          name: Install Dzil
       - run:
-          name: Run test
+          name: Install dzil author dependencies
           command: |
-            export PERL5LIB=$(pwd)/deps/lib/perl5:$(pwd)/deps/lib/perl5/$(perl -MConfig -le'print $Config{archname}'):$PERL5LIB
-            dzil test && dzil xtest
+            cpm install -g \
+            -w 2 \
+            --mirror=http://cpan.cpantesters.org/ $(dzil authordeps --missing)
+      - run:
+          name: Install dist deps
+          command: |
+            dzil listdeps --author --missing --cpanm-versions | xargs cpanm -n
+      - run:
+          name: Run Tests
+          command: |
+            dzil smoke --release --author && dzil cover -test && dzil xtest
+
 workflows:
-  version: 2
   build-workflow:
-    jobs:
-      - build
+    jobs: &1
+    - test:
+        matrix:
+          parameters:
+            perl-version:
+              - "5.22"
+              # no 5.23
+              - "5.24"
+              - "5.26"
+              - "5.28"
+              - "5.30"
+              - "5.32"
+              - "5.34"
+version: 2.1
